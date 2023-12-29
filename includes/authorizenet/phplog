@@ -1,0 +1,325 @@
+
+ Mon, 25 Sep 2017 11:02:10 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 114) - Request Serialization Begin
+ Mon, 25 Sep 2017 11:02:10 -0700 DEBUG : [execute] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 115) - net\authorize\api\contract\v1\GetSettledBatchListRequest Object
+(
+    [includeStatistics:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => 1
+    [firstSettlementDate:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => DateTime Object
+        (
+            [date] => 2015-08-25 06:00:00.000000
+            [timezone_type] => 2
+            [timezone] => Z
+        )
+
+    [lastSettlementDate:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => DateTime Object
+        (
+            [date] => 2015-09-20 20:33:59.000000
+            [timezone_type] => 3
+            [timezone] => UTC
+        )
+
+    [merchantAuthentication:net\authorize\api\contract\v1\ANetApiRequestType:private] => net\authorize\api\contract\v1\MerchantAuthenticationType Object
+        (
+            [name:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => spectrasonics5650
+            [transactionKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => xxxx
+            [sessionToken:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [password:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [impersonationAuthentication:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [fingerPrint:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [clientKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [mobileDeviceId:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+        )
+
+    [clientId:net\authorize\api\contract\v1\ANetApiRequestType:private] => sdk-php-1.9.3
+    [refId:net\authorize\api\contract\v1\ANetApiRequestType:private] => 
+)
+
+ Mon, 25 Sep 2017 11:02:10 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 118) - Request  Serialization End
+ Mon, 25 Sep 2017 11:02:10 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 75) -  Url: https://apitest.authorize.net/xml/v1/request.api
+ Mon, 25 Sep 2017 11:02:10 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 77) - Request to AnetApi: 
+<?xml version="1.0" encoding="UTF-8"?>
+<getSettledBatchListRequest xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">
+  <merchantAuthentication>
+    <name><![CDATA[spectrasonics5650]]></name>
+    <transactionKey>xxxx</transactionKey>
+  </merchantAuthentication>
+  <clientId><![CDATA[sdk-php-1.9.3]]></clientId>
+  <includeStatistics>true</includeStatistics>
+  <firstSettlementDate>2015-08-25T06:00:00+00:00</firstSettlementDate>
+  <lastSettlementDate>2015-09-20T20:33:59+00:00</lastSettlementDate>
+</getSettledBatchListRequest>
+
+ Mon, 25 Sep 2017 11:02:10 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 89) - Sending 'XML' Request type
+ Mon, 25 Sep 2017 11:02:10 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 94) - Sending http request via Curl
+ Mon, 25 Sep 2017 11:02:11 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 96) - Response from AnetApi: ﻿<?xml version="1.0" encoding="utf-8"?><getSettledBatchListResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><messages><resultCode>Error</resultCode><message><code>E00007</code><text>User authentication failed due to invalid authentication values.</text></message></messages></getSettledBatchListResponse>
+ Mon, 25 Sep 2017 11:02:11 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 128) - Response De-Serialization Begin
+ Mon, 25 Sep 2017 11:02:11 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 130) - Response De-Serialization End
+ Mon, 25 Sep 2017 11:09:28 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 114) - Request Serialization Begin
+ Mon, 25 Sep 2017 11:09:28 -0700 DEBUG : [execute] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 115) - net\authorize\api\contract\v1\GetSettledBatchListRequest Object
+(
+    [includeStatistics:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => 1
+    [firstSettlementDate:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => DateTime Object
+        (
+            [date] => 2015-08-25 06:00:00.000000
+            [timezone_type] => 2
+            [timezone] => Z
+        )
+
+    [lastSettlementDate:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => DateTime Object
+        (
+            [date] => 2015-09-20 20:33:59.000000
+            [timezone_type] => 3
+            [timezone] => UTC
+        )
+
+    [merchantAuthentication:net\authorize\api\contract\v1\ANetApiRequestType:private] => net\authorize\api\contract\v1\MerchantAuthenticationType Object
+        (
+            [name:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => spectrasonics5650
+            [transactionKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => xxxx
+            [sessionToken:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [password:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [impersonationAuthentication:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [fingerPrint:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [clientKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [mobileDeviceId:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+        )
+
+    [clientId:net\authorize\api\contract\v1\ANetApiRequestType:private] => sdk-php-1.9.3
+    [refId:net\authorize\api\contract\v1\ANetApiRequestType:private] => 
+)
+
+ Mon, 25 Sep 2017 11:09:28 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 118) - Request  Serialization End
+ Mon, 25 Sep 2017 11:09:28 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 75) -  Url: https://apitest.authorize.net/xml/v1/request.api
+ Mon, 25 Sep 2017 11:09:28 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 77) - Request to AnetApi: 
+<?xml version="1.0" encoding="UTF-8"?>
+<getSettledBatchListRequest xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">
+  <merchantAuthentication>
+    <name><![CDATA[spectrasonics5650]]></name>
+    <transactionKey>xxxx</transactionKey>
+  </merchantAuthentication>
+  <clientId><![CDATA[sdk-php-1.9.3]]></clientId>
+  <includeStatistics>true</includeStatistics>
+  <firstSettlementDate>2015-08-25T06:00:00+00:00</firstSettlementDate>
+  <lastSettlementDate>2015-09-20T20:33:59+00:00</lastSettlementDate>
+</getSettledBatchListRequest>
+
+ Mon, 25 Sep 2017 11:09:28 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 89) - Sending 'XML' Request type
+ Mon, 25 Sep 2017 11:09:28 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 94) - Sending http request via Curl
+ Mon, 25 Sep 2017 11:09:29 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 96) - Response from AnetApi: ﻿<?xml version="1.0" encoding="utf-8"?><getSettledBatchListResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><messages><resultCode>Error</resultCode><message><code>E00007</code><text>User authentication failed due to invalid authentication values.</text></message></messages></getSettledBatchListResponse>
+ Mon, 25 Sep 2017 11:09:29 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 128) - Response De-Serialization Begin
+ Mon, 25 Sep 2017 11:09:29 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 130) - Response De-Serialization End
+ Mon, 25 Sep 2017 12:53:21 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 114) - Request Serialization Begin
+ Mon, 25 Sep 2017 12:53:21 -0700 DEBUG : [execute] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 115) - net\authorize\api\contract\v1\GetSettledBatchListRequest Object
+(
+    [includeStatistics:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => 1
+    [firstSettlementDate:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => DateTime Object
+        (
+            [date] => 2015-08-25 06:00:00.000000
+            [timezone_type] => 2
+            [timezone] => Z
+        )
+
+    [lastSettlementDate:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => DateTime Object
+        (
+            [date] => 2015-09-20 20:33:59.000000
+            [timezone_type] => 3
+            [timezone] => UTC
+        )
+
+    [merchantAuthentication:net\authorize\api\contract\v1\ANetApiRequestType:private] => net\authorize\api\contract\v1\MerchantAuthenticationType Object
+        (
+            [name:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 63teL7Cn
+            [transactionKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => xxxx
+            [sessionToken:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [password:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [impersonationAuthentication:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [fingerPrint:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [clientKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [mobileDeviceId:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+        )
+
+    [clientId:net\authorize\api\contract\v1\ANetApiRequestType:private] => sdk-php-1.9.3
+    [refId:net\authorize\api\contract\v1\ANetApiRequestType:private] => 
+)
+
+ Mon, 25 Sep 2017 12:53:21 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 118) - Request  Serialization End
+ Mon, 25 Sep 2017 12:53:21 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 75) -  Url: https://apitest.authorize.net/xml/v1/request.api
+ Mon, 25 Sep 2017 12:53:21 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 77) - Request to AnetApi: 
+<?xml version="1.0" encoding="UTF-8"?>
+<getSettledBatchListRequest xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">
+  <merchantAuthentication>
+    <name><![CDATA[63teL7Cn]]></name>
+    <transactionKey>xxxx</transactionKey>
+  </merchantAuthentication>
+  <clientId><![CDATA[sdk-php-1.9.3]]></clientId>
+  <includeStatistics>true</includeStatistics>
+  <firstSettlementDate>2015-08-25T06:00:00+00:00</firstSettlementDate>
+  <lastSettlementDate>2015-09-20T20:33:59+00:00</lastSettlementDate>
+</getSettledBatchListRequest>
+
+ Mon, 25 Sep 2017 12:53:21 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 89) - Sending 'XML' Request type
+ Mon, 25 Sep 2017 12:53:21 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 94) - Sending http request via Curl
+ Mon, 25 Sep 2017 12:53:22 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 96) - Response from AnetApi: ﻿<?xml version="1.0" encoding="utf-8"?><getSettledBatchListResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><messages><resultCode>Ok</resultCode><message><code>I00004</code><text>No records found.</text></message></messages></getSettledBatchListResponse>
+ Mon, 25 Sep 2017 12:53:22 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 128) - Response De-Serialization Begin
+ Mon, 25 Sep 2017 12:53:22 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorize.net/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 130) - Response De-Serialization End
+ Mon, 25 Sep 2017 15:27:18 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 114) - Request Serialization Begin
+ Mon, 25 Sep 2017 15:27:18 -0700 DEBUG : [execute] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 115) - net\authorize\api\contract\v1\GetSettledBatchListRequest Object
+(
+    [includeStatistics:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => 1
+    [firstSettlementDate:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => DateTime Object
+        (
+            [date] => 2015-08-25 06:00:00.000000
+            [timezone_type] => 2
+            [timezone] => Z
+        )
+
+    [lastSettlementDate:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => DateTime Object
+        (
+            [date] => 2015-09-20 20:33:59.000000
+            [timezone_type] => 3
+            [timezone] => UTC
+        )
+
+    [merchantAuthentication:net\authorize\api\contract\v1\ANetApiRequestType:private] => net\authorize\api\contract\v1\MerchantAuthenticationType Object
+        (
+            [name:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => spectrasonics5650
+            [transactionKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => xxxx
+            [sessionToken:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [password:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [impersonationAuthentication:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [fingerPrint:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [clientKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [mobileDeviceId:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+        )
+
+    [clientId:net\authorize\api\contract\v1\ANetApiRequestType:private] => sdk-php-1.9.3
+    [refId:net\authorize\api\contract\v1\ANetApiRequestType:private] => 
+)
+
+ Mon, 25 Sep 2017 15:27:18 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 118) - Request  Serialization End
+ Mon, 25 Sep 2017 15:27:18 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 75) -  Url: https://api2.authorize.net/xml/v1/request.api
+ Mon, 25 Sep 2017 15:27:18 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 77) - Request to AnetApi: 
+<?xml version="1.0" encoding="UTF-8"?>
+<getSettledBatchListRequest xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">
+  <merchantAuthentication>
+    <name><![CDATA[spectrasonics5650]]></name>
+    <transactionKey>xxxx</transactionKey>
+  </merchantAuthentication>
+  <clientId><![CDATA[sdk-php-1.9.3]]></clientId>
+  <includeStatistics>true</includeStatistics>
+  <firstSettlementDate>2015-08-25T06:00:00+00:00</firstSettlementDate>
+  <lastSettlementDate>2015-09-20T20:33:59+00:00</lastSettlementDate>
+</getSettledBatchListRequest>
+
+ Mon, 25 Sep 2017 15:27:18 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 89) - Sending 'XML' Request type
+ Mon, 25 Sep 2017 15:27:18 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 94) - Sending http request via Curl
+ Mon, 25 Sep 2017 15:27:19 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 96) - Response from AnetApi: ﻿<?xml version="1.0" encoding="utf-8"?><getSettledBatchListResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><messages><resultCode>Ok</resultCode><message><code>I00001</code><text>Successful.</text></message></messages><batchList><batch><batchId>334670188</batchId><settlementTimeUTC>2015-08-25T07:19:39Z</settlementTimeUTC><settlementTimeLocal>2015-08-25T00:19:39</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>219.00</chargeAmount><chargeCount>3</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>458.00</chargeAmount><chargeCount>3</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>1780.50</chargeAmount><chargeCount>13</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>2</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>334820214</batchId><settlementTimeUTC>2015-08-26T07:49:31Z</settlementTimeUTC><settlementTimeLocal>2015-08-26T00:49:31</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>857.00</chargeAmount><chargeCount>5</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>614.50</chargeAmount><chargeCount>5</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>2</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>2606.50</chargeAmount><chargeCount>14</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>2</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>334961954</batchId><settlementTimeUTC>2015-08-27T07:17:08Z</settlementTimeUTC><settlementTimeLocal>2015-08-27T00:17:08</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>747.00</chargeAmount><chargeCount>4</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>757.00</chargeAmount><chargeCount>5</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>2</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>812.00</chargeAmount><chargeCount>8</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>335107454</batchId><settlementTimeUTC>2015-08-28T07:20:11Z</settlementTimeUTC><settlementTimeLocal>2015-08-28T00:20:11</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>249.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>1245.00</chargeAmount><chargeCount>6</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>2237.36</chargeAmount><chargeCount>15</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>2</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>335254692</batchId><settlementTimeUTC>2015-08-29T07:55:23Z</settlementTimeUTC><settlementTimeLocal>2015-08-29T00:55:23</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>249.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>946.00</chargeAmount><chargeCount>8</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>5</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>2035.45</chargeAmount><chargeCount>13</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>10</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>335350832</batchId><settlementTimeUTC>2015-08-30T07:19:13Z</settlementTimeUTC><settlementTimeLocal>2015-08-30T00:19:13</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>128.95</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>448.00</chargeAmount><chargeCount>2</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>1245.00</chargeAmount><chargeCount>5</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>3</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>335437855</batchId><settlementTimeUTC>2015-08-31T07:17:04Z</settlementTimeUTC><settlementTimeLocal>2015-08-31T00:17:04</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>448.00</chargeAmount><chargeCount>2</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>249.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>2260.00</chargeAmount><chargeCount>12</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>8</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>335584573</batchId><settlementTimeUTC>2015-09-01T07:37:37Z</settlementTimeUTC><settlementTimeLocal>2015-09-01T00:37:37</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>249.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>344.62</chargeAmount><chargeCount>4</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>1205.00</chargeAmount><chargeCount>12</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>335744552</batchId><settlementTimeUTC>2015-09-02T12:32:56Z</settlementTimeUTC><settlementTimeLocal>2015-09-02T05:32:56</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>498.00</chargeAmount><chargeCount>2</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>209.00</chargeAmount><chargeCount>2</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>1429.00</chargeAmount><chargeCount>9</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>5</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>335895014</batchId><settlementTimeUTC>2015-09-03T08:04:36Z</settlementTimeUTC><settlementTimeLocal>2015-09-03T01:04:36</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>199.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>906.00</chargeAmount><chargeCount>5</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>1582.95</chargeAmount><chargeCount>7</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>336041050</batchId><settlementTimeUTC>2015-09-04T07:16:52Z</settlementTimeUTC><settlementTimeLocal>2015-09-04T00:16:52</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>269.00</chargeAmount><chargeCount>3</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>1</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>1125.00</chargeAmount><chargeCount>6</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>3542.50</chargeAmount><chargeCount>21</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>4</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>336188239</batchId><settlementTimeUTC>2015-09-05T07:18:20Z</settlementTimeUTC><settlementTimeLocal>2015-09-05T00:18:20</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>249.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>864.50</chargeAmount><chargeCount>6</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>1</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>1608.00</chargeAmount><chargeCount>14</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>336290946</batchId><settlementTimeUTC>2015-09-06T07:23:46Z</settlementTimeUTC><settlementTimeLocal>2015-09-06T00:23:46</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>199.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>1102.50</chargeAmount><chargeCount>6</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>1</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>1063.50</chargeAmount><chargeCount>11</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>1</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>336371089</batchId><settlementTimeUTC>2015-09-07T07:15:47Z</settlementTimeUTC><settlementTimeLocal>2015-09-07T00:15:47</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>448.00</chargeAmount><chargeCount>2</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>110.00</chargeAmount><chargeCount>2</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>3</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>1369.00</chargeAmount><chargeCount>9</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>336462677</batchId><settlementTimeUTC>2015-09-08T07:16:24Z</settlementTimeUTC><settlementTimeLocal>2015-09-08T00:16:24</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>249.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>2575.45</chargeAmount><chargeCount>12</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>2</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>336613949</batchId><settlementTimeUTC>2015-09-09T08:19:00Z</settlementTimeUTC><settlementTimeLocal>2015-09-09T01:19:00</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>757.00</chargeAmount><chargeCount>4</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>1</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>299.00</chargeAmount><chargeCount>2</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>254.00</chargeAmount><chargeCount>7</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>2</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>336761301</batchId><settlementTimeUTC>2015-09-10T07:21:27Z</settlementTimeUTC><settlementTimeLocal>2015-09-10T00:21:27</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>448.00</chargeAmount><chargeCount>2</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>733.00</chargeAmount><chargeCount>6</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>538.00</chargeAmount><chargeCount>5</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>2</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>336910016</batchId><settlementTimeUTC>2015-09-11T07:16:57Z</settlementTimeUTC><settlementTimeLocal>2015-09-11T00:16:57</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>199.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Discover</accountType><chargeAmount>249.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>199.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>1066.00</chargeAmount><chargeCount>13</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>337058657</batchId><settlementTimeUTC>2015-09-12T07:19:02Z</settlementTimeUTC><settlementTimeLocal>2015-09-12T00:19:02</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>209.00</chargeAmount><chargeCount>2</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Discover</accountType><chargeAmount>10.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>1215.00</chargeAmount><chargeCount>7</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>2096.00</chargeAmount><chargeCount>15</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>1</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>337161022</batchId><settlementTimeUTC>2015-09-13T07:23:02Z</settlementTimeUTC><settlementTimeLocal>2015-09-13T00:23:02</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>Discover</accountType><chargeAmount>199.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>548.00</chargeAmount><chargeCount>3</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>1514.00</chargeAmount><chargeCount>9</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>337244675</batchId><settlementTimeUTC>2015-09-14T07:15:39Z</settlementTimeUTC><settlementTimeLocal>2015-09-14T00:15:39</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>209.00</chargeAmount><chargeCount>2</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>10.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>2307.50</chargeAmount><chargeCount>13</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>3</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>337389247</batchId><settlementTimeUTC>2015-09-15T07:22:27Z</settlementTimeUTC><settlementTimeLocal>2015-09-15T00:22:27</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>10.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>1344.00</chargeAmount><chargeCount>6</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>866.00</chargeAmount><chargeCount>6</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>337543316</batchId><settlementTimeUTC>2015-09-16T07:45:15Z</settlementTimeUTC><settlementTimeLocal>2015-09-16T00:45:15</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>657.00</chargeAmount><chargeCount>4</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>1285.00</chargeAmount><chargeCount>10</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>1</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>1132.50</chargeAmount><chargeCount>9</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>337690190</batchId><settlementTimeUTC>2015-09-17T07:21:06Z</settlementTimeUTC><settlementTimeLocal>2015-09-17T00:21:06</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>MasterCard</accountType><chargeAmount>856.00</chargeAmount><chargeCount>5</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>1</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>1643.00</chargeAmount><chargeCount>7</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>2</voidCount><declineCount>3</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>337838867</batchId><settlementTimeUTC>2015-09-18T07:46:52Z</settlementTimeUTC><settlementTimeLocal>2015-09-18T00:46:52</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>199.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>249.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>1504.00</chargeAmount><chargeCount>9</chargeCount><refundAmount>10.00</refundAmount><refundCount>1</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>337980879</batchId><settlementTimeUTC>2015-09-19T07:18:13Z</settlementTimeUTC><settlementTimeLocal>2015-09-19T00:18:13</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>597.00</chargeAmount><chargeCount>3</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>1142.45</chargeAmount><chargeCount>7</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>2</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>951.00</chargeAmount><chargeCount>10</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>2</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>338080043</batchId><settlementTimeUTC>2015-09-20T07:18:00Z</settlementTimeUTC><settlementTimeLocal>2015-09-20T00:18:00</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>MasterCard</accountType><chargeAmount>985.95</chargeAmount><chargeCount>6</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>1227.50</chargeAmount><chargeCount>8</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic></statistics></batch></batchList></getSettledBatchListResponse>
+ Mon, 25 Sep 2017 15:27:19 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 128) - Response De-Serialization Begin
+ Mon, 25 Sep 2017 15:27:19 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 130) - Response De-Serialization End
+ Mon, 25 Sep 2017 15:34:57 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 114) - Request Serialization Begin
+ Mon, 25 Sep 2017 15:34:57 -0700 DEBUG : [execute] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 115) - net\authorize\api\contract\v1\GetSettledBatchListRequest Object
+(
+    [includeStatistics:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => 1
+    [firstSettlementDate:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => DateTime Object
+        (
+            [date] => 2017-09-24 00:00:00.000000
+            [timezone_type] => 2
+            [timezone] => Z
+        )
+
+    [lastSettlementDate:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => DateTime Object
+        (
+            [date] => 2017-09-25 20:33:59.000000
+            [timezone_type] => 3
+            [timezone] => UTC
+        )
+
+    [merchantAuthentication:net\authorize\api\contract\v1\ANetApiRequestType:private] => net\authorize\api\contract\v1\MerchantAuthenticationType Object
+        (
+            [name:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => spectrasonics5650
+            [transactionKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => xxxx
+            [sessionToken:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [password:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [impersonationAuthentication:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [fingerPrint:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [clientKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [mobileDeviceId:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+        )
+
+    [clientId:net\authorize\api\contract\v1\ANetApiRequestType:private] => sdk-php-1.9.3
+    [refId:net\authorize\api\contract\v1\ANetApiRequestType:private] => 
+)
+
+ Mon, 25 Sep 2017 15:34:57 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 118) - Request  Serialization End
+ Mon, 25 Sep 2017 15:34:57 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 75) -  Url: https://api2.authorize.net/xml/v1/request.api
+ Mon, 25 Sep 2017 15:34:57 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 77) - Request to AnetApi: 
+<?xml version="1.0" encoding="UTF-8"?>
+<getSettledBatchListRequest xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">
+  <merchantAuthentication>
+    <name><![CDATA[spectrasonics5650]]></name>
+    <transactionKey>xxxx</transactionKey>
+  </merchantAuthentication>
+  <clientId><![CDATA[sdk-php-1.9.3]]></clientId>
+  <includeStatistics>true</includeStatistics>
+  <firstSettlementDate>2017-09-24T00:00:00+00:00</firstSettlementDate>
+  <lastSettlementDate>2017-09-25T20:33:59+00:00</lastSettlementDate>
+</getSettledBatchListRequest>
+
+ Mon, 25 Sep 2017 15:34:57 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 89) - Sending 'XML' Request type
+ Mon, 25 Sep 2017 15:34:57 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 94) - Sending http request via Curl
+ Mon, 25 Sep 2017 15:34:58 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 96) - Response from AnetApi: ﻿<?xml version="1.0" encoding="utf-8"?><getSettledBatchListResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><messages><resultCode>Ok</resultCode><message><code>I00004</code><text>No records found.</text></message></messages></getSettledBatchListResponse>
+ Mon, 25 Sep 2017 15:34:58 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 128) - Response De-Serialization Begin
+ Mon, 25 Sep 2017 15:34:58 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 130) - Response De-Serialization End
+ Mon, 25 Sep 2017 15:36:13 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 114) - Request Serialization Begin
+ Mon, 25 Sep 2017 15:36:13 -0700 DEBUG : [execute] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 115) - net\authorize\api\contract\v1\GetSettledBatchListRequest Object
+(
+    [includeStatistics:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => 1
+    [firstSettlementDate:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => DateTime Object
+        (
+            [date] => 2017-09-20 00:00:00.000000
+            [timezone_type] => 2
+            [timezone] => Z
+        )
+
+    [lastSettlementDate:net\authorize\api\contract\v1\GetSettledBatchListRequest:private] => DateTime Object
+        (
+            [date] => 2017-09-25 07:00:00.000000
+            [timezone_type] => 3
+            [timezone] => UTC
+        )
+
+    [merchantAuthentication:net\authorize\api\contract\v1\ANetApiRequestType:private] => net\authorize\api\contract\v1\MerchantAuthenticationType Object
+        (
+            [name:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => spectrasonics5650
+            [transactionKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => xxxx
+            [sessionToken:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [password:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [impersonationAuthentication:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [fingerPrint:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [clientKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [mobileDeviceId:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+        )
+
+    [clientId:net\authorize\api\contract\v1\ANetApiRequestType:private] => sdk-php-1.9.3
+    [refId:net\authorize\api\contract\v1\ANetApiRequestType:private] => 
+)
+
+ Mon, 25 Sep 2017 15:36:13 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 118) - Request  Serialization End
+ Mon, 25 Sep 2017 15:36:13 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 75) -  Url: https://api2.authorize.net/xml/v1/request.api
+ Mon, 25 Sep 2017 15:36:13 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 77) - Request to AnetApi: 
+<?xml version="1.0" encoding="UTF-8"?>
+<getSettledBatchListRequest xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">
+  <merchantAuthentication>
+    <name><![CDATA[spectrasonics5650]]></name>
+    <transactionKey>xxxx</transactionKey>
+  </merchantAuthentication>
+  <clientId><![CDATA[sdk-php-1.9.3]]></clientId>
+  <includeStatistics>true</includeStatistics>
+  <firstSettlementDate>2017-09-20T00:00:00+00:00</firstSettlementDate>
+  <lastSettlementDate>2017-09-25T07:00:00+00:00</lastSettlementDate>
+</getSettledBatchListRequest>
+
+ Mon, 25 Sep 2017 15:36:13 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 89) - Sending 'XML' Request type
+ Mon, 25 Sep 2017 15:36:13 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 94) - Sending http request via Curl
+ Mon, 25 Sep 2017 15:36:14 -0700 INFO : [_sendRequest] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 96) - Response from AnetApi: ﻿<?xml version="1.0" encoding="utf-8"?><getSettledBatchListResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><messages><resultCode>Ok</resultCode><message><code>I00001</code><text>Successful.</text></message></messages><batchList><batch><batchId>651986845</batchId><settlementTimeUTC>2017-09-20T07:24:35Z</settlementTimeUTC><settlementTimeLocal>2017-09-20T00:24:35</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>259.00</chargeAmount><chargeCount>2</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>518.00</chargeAmount><chargeCount>4</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>5</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>568.00</chargeAmount><chargeCount>9</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>26</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>652135094</batchId><settlementTimeUTC>2017-09-21T07:18:14Z</settlementTimeUTC><settlementTimeLocal>2017-09-21T00:18:14</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>MasterCard</accountType><chargeAmount>20.00</chargeAmount><chargeCount>2</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>17</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>828.50</chargeAmount><chargeCount>7</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>23</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>652283512</batchId><settlementTimeUTC>2017-09-22T07:20:22Z</settlementTimeUTC><settlementTimeLocal>2017-09-22T00:20:22</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>AmericanExpress</accountType><chargeAmount>10.00</chargeAmount><chargeCount>1</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>0</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>MasterCard</accountType><chargeAmount>0.00</chargeAmount><chargeCount>0</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>8</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>896.00</chargeAmount><chargeCount>9</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>18</declineCount><errorCount>0</errorCount></statistic></statistics></batch><batch><batchId>652433233</batchId><settlementTimeUTC>2017-09-23T08:21:04Z</settlementTimeUTC><settlementTimeLocal>2017-09-23T01:21:04</settlementTimeLocal><settlementState>settledSuccessfully</settlementState><paymentMethod>creditCard</paymentMethod><marketType>eCommerce</marketType><product>Card Not Present</product><statistics><statistic><accountType>MasterCard</accountType><chargeAmount>279.00</chargeAmount><chargeCount>4</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>7</declineCount><errorCount>0</errorCount></statistic><statistic><accountType>Visa</accountType><chargeAmount>279.00</chargeAmount><chargeCount>4</chargeCount><refundAmount>0.00</refundAmount><refundCount>0</refundCount><voidCount>0</voidCount><declineCount>2</declineCount><errorCount>0</errorCount></statistic></statistics></batch></batchList></getSettledBatchListResponse>
+ Mon, 25 Sep 2017 15:36:14 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 128) - Response De-Serialization Begin
+ Mon, 25 Sep 2017 15:36:14 -0700 INFO : [execute] (/srv/spectra/htdocs/admintools/includes/authorizenet/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 130) - Response De-Serialization End

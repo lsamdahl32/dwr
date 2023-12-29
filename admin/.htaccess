@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Access to /dwr/admin"
+AuthUserFile /kunden/homepages/14/d870620635/htpasswd
+Require user dwradmin

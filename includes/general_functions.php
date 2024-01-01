@@ -6,6 +6,10 @@
  *
  */
 
+ require_once($_SERVER['DOCUMENT_ROOT'] . "/dwr/vendor/autoload.php");
+
+ Dotenv\Dotenv::createUnsafeImmutable(__DIR__)->load();
+
 require_once($_SERVER['DOCUMENT_ROOT'] . '/dwr/includes/plm_config.php');
 require_once(PLMPATH . 'classes/DBEngine.php');
 

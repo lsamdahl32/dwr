@@ -11,14 +11,29 @@ define("PLMPATH", $_SERVER['DOCUMENT_ROOT'] . '/dwr/');
 const LOCKDB = 'plm';
 const PLMDB = 'plm';
 
-const DB_SETTINGS =  array(
+$db_user = getenv('DB_USER');
+//.getenv('DB_PASSWORD').getenv('DB_NAME').getenv('DB_HOST').getenv('DB_PORT');
+
+// const "DB_SETTINGS" =  array(
+// 	'plm' => array(
+// 		'username' => getenv('DB_USER'),
+// 		'password' => getenv('DB_PASSWORD'),
+// 		'db_name' => getenv('DB_NAME'),
+// 		'host' => getenv('DB_HOST'),
+// 		'port' => getenv('DB_PORT'),
+//         'ssl'   => false
+// 	),
+// 	// other databases can be added here
+// );
+
+define("DB_SETTINGS", array(
 	'plm' => array(
-		'username' => "dbu1914148",
-		'password' => "MXtbC6bGEJQzW4n9GOSX#1",
-		'db_name' => "dbs10541888",
-		'host' => "db5012541054.hosting-data.io",
-		'port' => 3306,
+		'username' => getenv('DB_USER'),
+		'password' => getenv('DB_PASSWORD'),
+		'db_name' => getenv('DB_NAME'),
+		'host' => getenv('DB_HOST'),
+		'port' => getenv('DB_PORT'),
         'ssl'   => false
 	),
 	// other databases can be added here
-);
+));

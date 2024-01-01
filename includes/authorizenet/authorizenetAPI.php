@@ -8,8 +8,8 @@
  * Time: 1:30 PM
  */
 
-define("MERCHANT_LOGIN_ID", '3cmN69vJR'); // todo need these codes - this is for sandbox
-define("MERCHANT_TRANSACTION_KEY", '428QB9w8pQ2rrJ8J'); // todo need these codes - this is for sandbox
+define("MERCHANT_LOGIN_ID", getenv('MERCHANT_LOGIN_ID')); // todo need these codes - this is for sandbox
+define("MERCHANT_TRANSACTION_KEY", getenv('MERCHANT_TRANSACTION_KEY')); // todo need these codes - this is for sandbox
 
 require $_SERVER['DOCUMENT_ROOT'] . '/dwr/includes/authorizenet/vendor/authorizenet/authorizenet/autoload.php';
 

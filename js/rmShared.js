@@ -274,68 +274,70 @@ let editModeScripts = function (identifier, settings) {
                 var obj = JSON.parse(result);
                 // console.log(obj);
                 if (typeof obj === 'object') {
-                    if (addmode) { // set the new current id
-                        settings.curId = obj[settings.keyField];
-                        $("#" + settings.keyField + "_" + identifier + "e").val(settings.curId);
-                    }
-                    clearTimeout(timeoutHandle);
-                    clearTimeout(timeoutHandle2);
-                    $(window).off("unload.recordlocking", function () {
-                    });
-                    dirty = false;
-                    unLockRecord();
-                    setSaveMessage(obj.msg);
-                    // callback function if exists
-                    if (typeof window[settings.updateCallback] == 'function') {
-                        window[settings.updateCallback](obj);
-                    }
-                    // reload the record
-                    reloadProfile(obj, window[rmRefreshCallback]);
-                    if ($(document.activeElement).prop('name') === "saveAddNew") { // save and add new
-                        // load a new add form
-                        let data = {};
-                        data["editLinkID" + identifier] = settings.curId;
-                        data["saveAndAddNew"] = 1;
-                        data["btnAdd" + identifier] = 1;
-                        addmode = true;
-                        settings.curId = 0;
-                        settings.mode = 'add';
-                        changeMode(settings.mode);
-                        // reloadInputs('add');
-                        getEditPage('add');
-                    } else {
-                        if (!settings.saveReturnsToEdit || addmode) {
-                            settings.editmode = false;
-                            // return to profile mode unless noProfileMode is set
-                            if (!settings.noProfileMode) {
-                                closeEditMode(400);
-                            } else { // must be a subtable
-                                closeEditMode(400);
-                                settings.mode = 'list';
-                                changeMode(settings.mode);
-                                $("#" + identifier + "-edit").hide();
-                                $("#" + identifier + "-report").show();
-                            }
-                        } else { // save returns to edit mode
-                            if (addmode) {
-                                // change to edit mode
-                                $("#profileHeading" + identifier).html('Edit ' + settings.editTitle);
-                                addmode = false;
-                                settings.mode = 'edit';
-                                changeMode(settings.mode);
-                                resetTimeout();
+                    if (obj['result'] === 'Success') {
+                        if (addmode) { // set the new current id
+                            settings.curId = obj[settings.keyField];
+                            $("#" + settings.keyField + "_" + identifier + "e").val(settings.curId);
+                        }
+                        clearTimeout(timeoutHandle);
+                        clearTimeout(timeoutHandle2);
+                        $(window).off("unload.recordlocking", function () {
+                        });
+                        dirty = false;
+                        unLockRecord();
+                        setSaveMessage(obj.msg);
+                        // callback function if exists
+                        if (typeof window[settings.updateCallback] == 'function') {
+                            window[settings.updateCallback](obj);
+                        }
+                        // reload the record
+                        reloadProfile(obj, window[rmRefreshCallback]);
+                        if ($(document.activeElement).prop('name') === "saveAddNew") { // save and add new
+                            // load a new add form
+                            let data = {};
+                            data["editLinkID" + identifier] = settings.curId;
+                            data["saveAndAddNew"] = 1;
+                            data["btnAdd" + identifier] = 1;
+                            addmode = true;
+                            settings.curId = 0;
+                            settings.mode = 'add';
+                            changeMode(settings.mode);
+                            // reloadInputs('add');
+                            getEditPage('add');
+                        } else {
+                            if (!settings.saveReturnsToEdit || addmode) {
+                                settings.editmode = false;
+                                // return to profile mode unless noProfileMode is set
+                                if (!settings.noProfileMode) {
+                                    closeEditMode(400);
+                                } else { // must be a subtable
+                                    closeEditMode(400);
+                                    settings.mode = 'list';
+                                    changeMode(settings.mode);
+                                    $("#" + identifier + "-edit").hide();
+                                    $("#" + identifier + "-report").show();
+                                }
+                            } else { // save returns to edit mode
+                                if (addmode) {
+                                    // change to edit mode
+                                    $("#profileHeading" + identifier).html('Edit ' + settings.editTitle);
+                                    addmode = false;
+                                    settings.mode = 'edit';
+                                    changeMode(settings.mode);
+                                    resetTimeout();
+                                }
                             }
                         }
-                    }
-                } else { // save failed show messages
-                    var obj = JSON.parse(result);
-                    // console.log(obj);
-                    if (typeof obj === 'object') {
-                        setSaveMessage(obj.msg);
-                        Object.keys(obj).forEach(function (key) {
-                            // show any error messages
-                            $("#" + key + "_" + identifier + "e_err").html(obj[key]);
-                        });
+                    } else { // save failed show messages
+                        var obj = JSON.parse(result);
+                        // console.log(obj);
+                        if (typeof obj === 'object') {
+                            setSaveMessage(obj.msg);
+                            Object.keys(obj).forEach(function (key) {
+                                // show any error messages
+                                $("#" + key + "_" + identifier + "e_err").html(obj[key]);
+                            });
+                        }
                     }
                 }
             });

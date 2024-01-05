@@ -52,43 +52,60 @@ require_once('./page_nav.php');
                     Change
                 </button>
             </div>
-            <div class="form_rows">
-                <label for="name" class="form_label">Room</label>
-                <div class="form_cell">
-                    <?=$room['roomName']?>
-                </div>
-            </div>
-            <div class="form_rows">
-                <label for="name" class="form_label">Check In/Out</label>
-                <div class="form_cell">
-                    <div><span id="date_range"><?=$dateRange['range']?></span> | <span id="num_nights"><?=$dateRange['nights']?></span> night(s)</div>
-                </div>
-            </div>
-            <div class="form_rows">
-                <label for="name" class="form_label">Extra Items</label>
-                <div class="form_cell">
-                    None
-                </div>
-            </div>
-            <?php foreach ($_SESSION['bookingTotals'] as $key => $bt_item) {
-                $item = unserialize($bt_item);
-                ?>
-                <div class="order_total <?=($item->getIsTotal())?'total_line':''?>">
-                    <div class="form_label"><?=$item->getItemType()?></div>
-                    <div class="form_cell">
-                        $<?=number_format($item->getAmount(), 2)?>
+            <div id="booking_summary">
+                <div id="booking_summary_left">
+                    <div class="form_rows">
+                        <label for="name" class="form_label">Room</label>
+                        <div class="form_cell">
+                            <?=$room['roomName']?>
+                        </div>
                     </div>
+                    <div class="form_rows">
+                        <label for="name" class="form_label">Check In/Out</label>
+                        <div class="form_cell">
+                            <div><span id="date_range"><?=$dateRange['range']?></span> | <span id="num_nights"><?=$dateRange['nights']?></span> night(s)</div>
+                        </div>
+                    </div>
+                    <div class="form_rows">
+                        <label for="name" class="form_label">Extra Items</label>
+                        <div class="form_cell">
+                            <p>Additional items are available to make your stay more enjoyable. Please <a href="contact.php" target="_blank">contact us</a> 
+                            for availability and pricing.</p>
+                            <ul style="height: 100px; overflow-y: auto;">
+                                <?php
+                                foreach ($amenities as $item) {
+                                    echo '<li>' . $item['amenity'] . ': ' . $item['description'] . '</li>';
+                                }
+                                ?>
+                            </ul>
+                        </div>
+                    </div>                    
                 </div>
-            <?php }
-            if (ALLOW_DEPOSITS) {
-                if (DEPOSIT_TYPE == 'Percent') {
-                    $depositAmt = DEPOSIT_PERCENT . '% of the total bill';
-                } else {
-                    $depositAmt = '$' . number_format(DEPOSIT_AMOUNT, 2);
-                }
-                echo '<p>' . str_replace('{depositAmt}', $depositAmt, DEPOSIT_TEXT) . '</p>';
-            }
-            ?>
+                <div>
+                    <?php foreach ($_SESSION['bookingTotals'] as $key => $bt_item) {
+                        $item = unserialize($bt_item);
+                        if ($item->getAmount() != 0) {
+                            ?>
+                            <div class="order_total <?=($item->getIsTotal())?'total_line':''?>">
+                                <div class="form_label"><?=$item->getItemType()?></div>
+                                <div class="form_cell">
+                                    $<?=number_format($item->getAmount(), 2)?>
+                                </div>
+                            </div>
+                            <?php 
+                        }
+                    }
+                    if (ALLOW_DEPOSITS) {
+                        if (DEPOSIT_TYPE == 'Percent') {
+                            $depositAmt = DEPOSIT_PERCENT . '% of the total bill';
+                        } else {
+                            $depositAmt = '$' . number_format(DEPOSIT_AMOUNT, 2);
+                        }
+                        echo '<p>' . str_replace('{depositAmt}', $depositAmt, DEPOSIT_TEXT) . '</p>';
+                    }
+                    ?>
+                </div>
+            </div>
         </section>
         <section>
             <h3>Enter Your Payment Information</h3>
@@ -108,7 +125,7 @@ require_once('./page_nav.php');
                 <div class="form_rows">
                     <label for="amountPaid" class="form_label">Amount to Charge:</label>
                     <div class="form_cell">$
-                        <input type="number" name="amountPaid" id="amountPaid" required min="<?=$balanceDue?>" max="<?=$total?>" value="<?=number_format($balanceDue,2)?>" />
+                        <input type="number" name="amountPaid" id="amountPaid" required min="<?=$balanceDue?>" max="<?=$total?>" step=".01" value="<?=number_format($balanceDue,2)?>" />
                         <span class="form_error">*</span>
                     </div>
                 </div>

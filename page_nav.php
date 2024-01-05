@@ -14,7 +14,7 @@
     <nav>
         <ul>
             <li><a href="./index.php">Home</a></li>
-            <li><a href="accommodations.php">Accommodations</a></li>
+            <!-- <li><a href="accommodations.php">Accommodations</a></li> -->
             <li><a href="roomSearch.php">Book a Room</a></li>
             <li><a href="attractions.php">Tucson Attractions</a></li>
             <li><a href="contact.php">Contact Us</a></li>

@@ -56,11 +56,12 @@ $rt1->addColumn(array('field'=>'amenityID', 'heading'=>'Action', 'type'=>'link:a
 $rt1->addColumn(array('field'=>'amenity', 'heading'=>'Amenity', 'type'=>'s', 'width'=>'2', 'format'=>'', 'profile'=>true, 'profileOrder'=>1, 'search'=>true, 'edit'=>true, 'sort'=>true, 'show'=>true, 'required'=>true));
 $rt1->addColumn(array('field'=>'description', 'heading'=>'Description', 'type'=>'t', 'width'=>'3', 'format'=>'', 'size'=>0, 'height'=>'2', 'profile'=>true, 'profileOrder'=>5, 'search'=>true, 'edit'=>true, 'sort'=>true, 'show'=>true, 'required'=>false));
 $rt1->addColumn(array('field'=>'sortOrder', 'heading'=>'Sort Order', 'type'=>'i', 'width'=>'1', 'format'=>'', 'profile'=>true, 'profileOrder'=>3, 'search'=>true, 'edit'=>true, 'sort'=>true, 'show'=>true,));
-$rt1->addColumn(array('field'=>'price', 'heading'=>'Price', 'type'=>'i', 'width'=>'1', 'format'=>'currency', 'profile'=>true, 'profileOrder'=>4, 'search'=>true, 'edit'=>true, 'sort'=>true, 'show'=>true));
-$rt1->addColumn(array('field'=>'isAvailable', 'heading'=>'Available', 'type'=>'b', 'width'=>'1', 'format'=>'', 'profile'=>true, 'profileOrder'=>6, 'search'=>true, 'edit'=>true, 'sort'=>true, 'show'=>true, 'default'=>true));
-$rt1->addColumn(array('field'=>'isOptional', 'heading'=>'Is Optional', 'type'=>'b', 'width'=>'1', 'format'=>'', 'profile'=>true, 'profileOrder'=>6, 'search'=>true, 'edit'=>true, 'sort'=>true, 'show'=>true));
-$rt1->addColumn(array('field'=>'createdOn', 'heading'=>'Created On', 'type'=>'d', 'width'=>'1.2', 'format'=>'m/d/Y H:i:s', 'profile'=>true, 'profileOrder'=>14, 'search'=>true, 'edit'=>false, 'sort'=>true, 'show'=>true));
-$rt1->addColumn(array('field'=>'modifiedOn', 'heading'=>'Modified On', 'type'=>'d', 'width'=>'1.2', 'format'=>'m/d/Y H:i:s', 'profile'=>true, 'profileOrder'=>15, 'search'=>true, 'edit'=>false, 'sort'=>true, 'show'=>true));
+$rt1->addColumn(array('field'=>'price', 'heading'=>'Price', 'type'=>'i', 'width'=>'.8', 'step'=>'.01', 'format'=>'currency', 'profile'=>true, 'profileOrder'=>4, 'search'=>true, 'edit'=>true, 'sort'=>true, 'show'=>true));
+$rt1->addColumn(array('field'=>'pricePer', 'heading'=>'Price Per', 'type'=>'s', 'width'=>'.8', 'format'=>array('Night','Stay'), 'profile'=>true, 'profileOrder'=>6, 'search'=>true, 'edit'=>true, 'sort'=>true, 'show'=>true, 'default'=>'Night'));
+$rt1->addColumn(array('field'=>'isAvailable', 'heading'=>'Available', 'type'=>'b', 'width'=>'1', 'format'=>'', 'profile'=>true, 'profileOrder'=>7, 'search'=>true, 'edit'=>true, 'sort'=>true, 'show'=>true, 'default'=>true));
+$rt1->addColumn(array('field'=>'isOptional', 'heading'=>'Is Optional', 'type'=>'b', 'width'=>'1', 'format'=>'', 'profile'=>true, 'profileOrder'=>8, 'search'=>true, 'edit'=>true, 'sort'=>true, 'show'=>true));
+$rt1->addColumn(array('field'=>'createdOn', 'heading'=>'Created On', 'type'=>'d', 'width'=>'1.2', 'format'=>'m/d/Y H:i:s', 'profile'=>true, 'profileOrder'=>9, 'search'=>true, 'edit'=>false, 'sort'=>true, 'show'=>true));
+$rt1->addColumn(array('field'=>'modifiedOn', 'heading'=>'Modified On', 'type'=>'d', 'width'=>'1.2', 'format'=>'m/d/Y H:i:s', 'profile'=>true, 'profileOrder'=>10, 'search'=>true, 'edit'=>false, 'sort'=>true, 'show'=>true));
 
 $atr->process();
 

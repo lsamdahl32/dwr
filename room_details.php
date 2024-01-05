@@ -92,7 +92,7 @@ require_once('./page_nav.php');
                         </section>
                         <section>
                             <h3>Terms:</h3>
-                            <p><a href="#" >Our Policies</a></p>
+                            <p><a href="policies.php" >Our Policies</a></p>
                         </section>
 
                     </div>

@@ -34,7 +34,6 @@ class PLManager
     public function __construct()
     {
         $this->dbe = new DBEngine(PLMDB);
-
     }
 
     /**
@@ -90,18 +89,35 @@ class PLManager
     /**
      * Get Room Amenities
      * @param int $roomID
-     * @return mixed
+     * @return array
      */
     public function getRoomAmenities(int $roomID)
     {
-        $pq_query = 'SELECT * FROM `roomAmenities` r INNER JOIN `amenities` a ON a.`amenityID` = r.`amenityID`  WHERE r.`roomID` = ? AND r.`isOptional` = ? AND a.`isAvailable` = ? ORDER BY r.`sortOrder` DESC ';
+        $pq_query = 'SELECT * FROM `roomAmenities` r INNER JOIN `amenities` a ON a.`amenityID` = r.`amenityID`  WHERE r.`roomID` = ? AND r.`isOptional` = ? AND a.`isAvailable` = ? ORDER BY r.`sortOrder` ';
         $this->dbe->setBindtypes('iii');
         $this->dbe->setBindvalues(array($roomID, 0, 1));
         $amenities = $this->dbe->execute_query($pq_query);
         if ($amenities) {
             return $amenities;
         } else {
-            return 'Not Set';
+            return array();
+        }
+    }
+
+    /**
+     * Get Optional Amenities
+     * @return mixed
+     */
+    public function getOptionalAmenities()
+    {
+        $pq_query = 'SELECT * FROM `amenities` WHERE `isOptional` = ? AND `isAvailable` = ? ORDER BY `sortOrder` ';
+        $this->dbe->setBindtypes('ii');
+        $this->dbe->setBindvalues(array(1, 1));
+        $amenities = $this->dbe->execute_query($pq_query);
+        if ($amenities) {
+            return $amenities;
+        } else {
+            return 'No Options Available';
         }
     }
 
@@ -200,14 +216,7 @@ class PLManager
     {
         $output = array();
         if (strtotime($checkIn) > strtotime('now -1 day') and strtotime($checkOut) > strtotime('now')) {
-            // get the total nights in range
-            $begin = new DateTime($checkIn);
-            $end = new DateTime($checkOut);
-
-            $interval = DateInterval::createFromDateString('1 day');
-            $period = new DatePeriod($begin, $interval, $end);
-
-            $nights = $end->diff($begin)->format("%a");
+            $nights = $this->getNightCount($checkIn, $checkOut);
 
             $output['range'] = date('D, M j, Y', strtotime($checkIn)) . ' to ' . date('D, M j, Y', strtotime($checkOut));
             $output['nights'] = $nights;
@@ -217,6 +226,18 @@ class PLManager
         }
 
         return $output;
+    }
+
+    public function getNightCount($checkIn, $checkOut)
+    {
+        // get the total nights in range
+        $begin = new DateTime($checkIn);
+        $end = new DateTime($checkOut);
+
+        $interval = DateInterval::createFromDateString('1 day');
+        $period = new DatePeriod($begin, $interval, $end);
+
+        return $end->diff($begin)->format("%a");
     }
 
     /**
@@ -232,13 +253,23 @@ class PLManager
         if ($this->validateBookingItems($_SESSION['checkIn'], $_SESSION['checkOut'], $_SESSION['roomID'])) {
             // save pending booking and get bookingID (used as invoice number)
             $_SESSION['paymentStatus'] = self::PMT_STATUS_PENDING;
-            $_SESSION['bookingStatus'] = self::BOOKING_STATUS_PROCESSING;
+            $_SESSION['bookingStatus'] = self::BOOKING_STATUS_PENDING;
             $this->dbe->beginTrans();
             $result = $this->saveGuestInfo();
             $bookingID = $this->saveNewBookingInfo($bookedBy);
             if ($result > 0 and $bookingID > 0) {
                 $_SESSION['guest'] = $this->getGuestInfo($result);
                 $_SESSION['booking'] = $this->getBookingInfo($bookingID);
+                $totalCharge = unserialize($_SESSION['bookingTotals']['total'])->getAmount();
+                $paymentID =$this->savePaymentRecord(
+                                $bookingID, 
+                                $_SESSION['guest']['guestID'], 
+                                $totalCharge, 'credit', 
+                                'card-' . substr($_POST['cardNum'], -4), 
+                                '', 
+                                $_SESSION['paymentStatus'], 
+                                ''
+                            );
             } else {
                 $this->dbe->rollbackTrans();
                 return false;
@@ -251,6 +282,7 @@ class PLManager
             // $_SESSION['guest']['zip'] = '46217'; // 
             // print_r($_SESSION['guest']);exit;
 
+            $_SESSION['bookingStatus'] = self::BOOKING_STATUS_PROCESSING;
             // send payment info to CC handler
             $response = $anet->chargeCreditCard(
                                 $_SESSION['amountPaid'],
@@ -258,7 +290,7 @@ class PLManager
                                 $_POST['expDate'],
                                 $_POST['cvv'],
                                 $_SESSION['booking']['bookingID'],
-                                'Booking', // todo add more detail?
+                                'Booking Charges', // todo add more detail?
                                 $_SESSION['guest']
             );
 
@@ -272,64 +304,79 @@ class PLManager
                     // and parse it to display the results of authorizing the card
                     $tresponse = $response->getTransactionResponse();
                             
-                    if ($tresponse->getTransId()) {
-                        // echo 'HERE3 '; 
+                    // echo 'HERE3 '; 
 
-                        switch ($tresponse->getResponseCode()) { 
-                            
-                            case 1: // the payment was approved
-                                // echo 'HERE4 '; 
-                                //    echo " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
-                                //    echo " Transaction Response Code: " . $tresponse->getResponseCode() . "\n";
-                                //    echo " Message Code: " . $tresponse->getMessages()[0]->getCode() . "\n";
-                                //    echo " Auth Code: " . $tresponse->getAuthCode() . "\n";
-                                //    echo " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";
-                                unset($_SESSION['transID']); // clear the transID to prevent re-entry
-                                $_SESSION['paymentStatus'] = self::PMT_STATUS_COMPLETED;
-                                $_SESSION['txnID'] = $tresponse->getTransId();
-                                if ($this->saveBookingInfo($bookingID)) {
-                                    // echo 'HERE5 '; 
-                                    $this->dbe->commitTrans();
-                                    // log the response
-                                    $this->logResponse($tresponse);
-                                    $_SESSION['booking'] = $this->getBookingInfo($bookingID);
-                                    unset($_SESSION['errorCode']);
-                                    unset($_SESSION['errorMessage']);
-                                    return true;
-                                } else {
-                                    // This should not happen!
-                                    $this->dbe->rollbackTrans();
-                                    // log the response
-                                    $this->logResponse($tresponse);
-                                    $_SESSION['errorCode'] = 0;
-                                    $_SESSION['errorMessage'] = 'Failed to save booking info.';
-                                }
-                                break;
-
-                            case 2: // Declined
-                            case 3: // Error
-                            case 4: // Held for Review
+                    switch ($tresponse->getResponseCode()) { 
+                        
+                        case 1: // the payment was approved
+                            // echo 'HERE4 '; 
+                            //    echo " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
+                            //    echo " Transaction Response Code: " . $tresponse->getResponseCode() . "\n";
+                            //    echo " Message Code: " . $tresponse->getMessages()[0]->getCode() . "\n";
+                            //    echo " Auth Code: " . $tresponse->getAuthCode() . "\n";
+                            //    echo " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";
+                            unset($_SESSION['transID']); // clear the transID to prevent re-entry
+                            $_SESSION['paymentStatus'] = self::PMT_STATUS_COMPLETED;
+                            $_SESSION['bookingStatus'] = self::BOOKING_STATUS_COMPLETED;
+                            $_SESSION['txnID'] = $tresponse->getTransId();
+                            if ($this->saveBookingInfo($bookingID, $paymentID)) {
+                                // echo 'HERE5 '; 
+                                $this->dbe->commitTrans();
+                                // log the response
+                                $this->logResponse($tresponse);
+                                $_SESSION['booking'] = $this->getBookingInfo($bookingID);
+                                unset($_SESSION['errorCode']);
+                                unset($_SESSION['errorMessage']);
+                                return true;
+                            } else {
+                                // This should not happen!
                                 $this->dbe->rollbackTrans();
                                 // log the response
                                 $this->logResponse($tresponse);
-                                // echo 'HERE6 '; 
-                                if ($tresponse->getErrors() != null) {
-                                    // echo 'HERE7 '; 
-                                    $_SESSION['errorCode'] = $tresponse->getErrors()[0]->getErrorCode();
-                                    $_SESSION['errorMessage'] = $tresponse->getErrors()[0]->getErrorText();
-                                } else {
-                                    // echo 'HERE8 '; 
-                                    $_SESSION['errorCode'] = $tresponse->getMessages()->getMessage()[0]->getCode();
-                                    $_SESSION['errorMessage'] = $tresponse->getMessages()->getMessage()[0]->getText();
-                                }
-                                break;
-                        } 
-                    }
+                                $_SESSION['errorCode'] = 0;
+                                $_SESSION['errorMessage'] = 'Failed to save booking info.';
+                            }
+                            break;
+
+                        case 2: // Declined
+                            $_SESSION['paymentStatus'] = self::PMT_STATUS_DENIED;
+                            $_SESSION['bookingStatus'] = self::BOOKING_STATUS_CANCELLED;
+                            // log the response
+                            $this->logResponse($tresponse);
+                            break;
+
+                        case 3: // Error
+                            $_SESSION['paymentStatus'] = self::PMT_STATUS_FAILED;
+                            $_SESSION['bookingStatus'] = self::BOOKING_STATUS_CANCELLED;
+                            // log the response
+                            $this->logResponse($tresponse);
+                            break;
+
+                        case 4: // Held for Review
+                            $this->dbe->rollbackTrans();
+                            $_SESSION['paymentStatus'] = self::PMT_STATUS_PENDING;
+                            $_SESSION['bookingStatus'] = self::BOOKING_STATUS_CANCELLED;
+                            // log the response
+                            $this->logResponse($tresponse);
+                            $this->setErrorMessages($tresponse);
+                            break;
+
+                        default:
+                            // echo 'HERE6 '; 
+                            if ($tresponse->getErrors() != null) {
+                                // echo 'HERE7 '; 
+                                $_SESSION['errorCode'] = $tresponse->getErrors()[0]->getErrorCode();
+                                $_SESSION['errorMessage'] = $tresponse->getErrors()[0]->getErrorText();
+                            }
+                            break;
+                    } 
                 } else {
                     $this->dbe->rollbackTrans();
                     // error 
                     // echo 'HERE9 '; 
                     $tresponse = $response->getTransactionResponse();
+                    $_SESSION['paymentStatus'] = self::PMT_STATUS_FAILED;
+                    $_SESSION['bookingStatus'] = self::BOOKING_STATUS_CANCELLED;
     
                     if ($tresponse != null && $tresponse->getErrors() != null) {
                         // echo 'HERE10 '; 
@@ -348,13 +395,29 @@ class PLManager
             } else {
                 $this->dbe->rollbackTrans();
                 // echo 'HERE12 '; 
+                $_SESSION['paymentStatus'] = self::PMT_STATUS_FAILED;
+                $_SESSION['bookingStatus'] = self::BOOKING_STATUS_CANCELLED;
 
-            // print_r($tresponse);
+                // print_r($tresponse);
                 $_SESSION['errorCode'] = 0;
                 $_SESSION['errorMessage'] = "Transaction Failed";
             }
         }
         return false;
+    }
+
+    private function setErrorMessages($tresponse)
+    {
+        // echo 'HERE6 '; 
+        if ($tresponse->getErrors() != null) {
+            // echo 'HERE7 '; 
+            $_SESSION['errorCode'] = $tresponse->getErrors()[0]->getErrorCode();
+            $_SESSION['errorMessage'] = $tresponse->getErrors()[0]->getErrorText();
+        } else {
+            // echo 'HERE8 '; 
+            $_SESSION['errorCode'] = $tresponse->getMessages()->getMessage()[0]->getCode();
+            $_SESSION['errorMessage'] = $tresponse->getMessages()->getMessage()[0]->getText();
+        }
     }
 
     /**
@@ -431,6 +494,7 @@ class PLManager
     public function saveNewBookingInfo($bookedBy):int
     {
         if ($this->validateBookingItems($_SESSION['checkIn'], $_SESSION['checkOut'], $_SESSION['roomID'])) {
+            $totalLodging  = unserialize($_SESSION['bookingTotals']['sub'])->getAmount();
             $totalCharge = unserialize($_SESSION['bookingTotals']['total'])->getAmount();
             $balanceDue = $_SESSION['amountPaid'];
 
@@ -440,15 +504,14 @@ class PLManager
                 'guestID' => $_SESSION['guest']['guestID'],
                 'checkIn'   => $_SESSION['checkIn'],
                 'checkOut'  => $_SESSION['checkOut'],
+                'nights'    => $_SESSION['nights'],
                 'bookingStatusID' => $_SESSION['bookingStatus'],
                 'bookedBy'  => $bookedBy,
+                'totalLodging' => $totalLodging,
                 'totalPrice'    => $totalCharge,
                 'deposit'   => 0,
                 'amountPaid' => 0,
                 'amountDue' => $balanceDue,
-                'paymentStatusID'   => $_SESSION['paymentStatus'],
-                'paidBy'    => 'card-' . substr($_POST['cardNum'], -4), // show last 4 digits of cc
-//                    'txnID'     => 'xxxx', // todo this will come from cc processing service
                 'ipAddress' => $_SERVER['REMOTE_ADDR'],
             );
             $result = $this->dbe->insertRow('bookings', $data);
@@ -461,12 +524,28 @@ class PLManager
         return 0;
     }
 
+    public function savePaymentRecord($bookingID, $guestID, $amount, $paymentType, $checkNumber = '', $paidBy = '', $paymentStatus = 0, $txnID = '')
+    {
+        $data = array(
+            'bookingID' => array('data'=>$bookingID, 'bindtype'=>'i'), 
+            'guestID' => array('data'=>$guestID, 'bindtype'=>'i'),
+            'type' => array('data'=>$paymentType, 'bindtype'=>'s'), 
+            'amount' => array('data'=>$amount, 'bindtype'=>'d'), 
+            'paidBy' => array('data'=>$paidBy, 'bindtype'=>'s'), 
+            'txnID' => array('data'=>$txnID, 'bindtype'=>'s'),
+            'checkNumber' => array('data'=>$checkNumber, 'bindtype'=>'s'), 
+            'paymentStatusID' => array('data'=>$paymentStatus, 'bindtype'=>'i'), 
+        );
+        return $this->dbe->insertRow('payments', $data);
+    }
+
     /**
      * Save Booking Info
      * @param int bookingID
+     * @param int paymentID
      * @return int - the bookingID or zero if error
      */
-    public function saveBookingInfo($bookingID):int
+    public function saveBookingInfo($bookingID, $paymentID):int
     {
         IF ($_SESSION['paymentStatus'] == self::PMT_STATUS_COMPLETED) {
 
@@ -476,17 +555,21 @@ class PLManager
 
             // save the booking
             $data = array(
-                'bookingStatusID' => $_SESSION['bookingStatus'],
-                'totalPrice'    => $totalCharge,
-                'deposit'   => $totalPaid,
-                'amountPaid' => $totalPaid,
-                'amountDue' => $balanceDue,
-                'paymentStatusID'   => $_SESSION['paymentStatus'],
-                'paidBy'    => 'card-' . substr($_POST['cardNum'], -4), // show last 4 digits of cc
-                'txnID'     => $_SESSION['txnID'], // this comes from cc processing service
+                'bookingStatusID' => array('data'=>$_SESSION['bookingStatus'], 'bindtype'=>'s'),
+                'totalPrice'    =>  array('data'=>$totalCharge, 'bindtype'=>'d'),
+                'deposit'   =>  array('data'=>$totalPaid, 'bindtype'=>'d'),
+                'amountPaid' =>  array('data'=>$totalPaid, 'bindtype'=>'d'),
+                'amountDue' =>  array('data'=>$balanceDue, 'bindtype'=>'d'),
             );
             $result = $this->dbe->updateRow('bookings', $data, 'bookingID', $bookingID);
             if ($result > 0) {
+                // update the payments record
+                $data = array(
+                    'amount' => array('data'=>$totalPaid, 'bindtype'=>'d'),
+                    'paymentStatusID' => array('data'=>$_SESSION['paymentStatus'], 'bindtype'=>'s'),
+                    'txnID' => array('data'=>$_SESSION['txnID'], 'bindtype'=>'s'), // this comes from cc processing service
+                );
+                $result2 = $this->dbe->updateRow('payments', $data, 'paymentID', $paymentID);
                 // update the booking totals
                 $_SESSION['bookingTotals']['dep'] = serialize(new BookingTotal('dep', $totalPaid, $_SESSION['roomID']));
                 $_SESSION['bookingTotals']['due'] = serialize(new BookingTotal('due', $balanceDue, $_SESSION['roomID']));
@@ -494,16 +577,17 @@ class PLManager
                 $i = 1;
                 foreach ($_SESSION['bookingTotals'] as  $bt_item) {
                     $item = unserialize($bt_item);
-                    $data = array(
-                        'bookingID' => $bookingID,
-                        'item'      => $item->getItemType(),
-                        'amount'    => $item->getAmount(),
-                        'roomID'    => $_SESSION['roomID'],
-                        'sortOrder' => $i,
-                        'isTotal'   => $item->getIsTotal(),
-                        'isCredit'  => $item->getIsCredit(),
+                    $result2 = $this->addBookingTotal(
+                        $bookingID,
+                        $item->getType(),
+                        $item->getItemType(),
+                        $item->getAmount(),
+                        $_SESSION['roomID'],
+                        $item->getSortOrder(),
+                        $item->getIsTotal(),
+                        $item->getIsCredit(),
+                        $paymentID
                     );
-                    $result2 = $this->dbe->insertRow('bookingTotals', $data);
                     $i++;
                 }
 
@@ -514,25 +598,42 @@ class PLManager
     }
 
     /**
+     * Add a Booking Total record
+     * @return mixed
+     */
+    public function addBookingTotal($bookingID, $type, $item, $amount, $roomID, $sortOrder, $isTotal, $isCredit, $paymentID = 0)
+    {
+        $data = array(
+            'bookingID' => array('data'=>$bookingID, 'bindtype'=>'i'),
+            'type'      => array('data'=>$type, 'bindtype'=>'s'),
+            'item'      => array('data'=>$item, 'bindtype'=>'s'),
+            'amount'    => array('data'=>$amount, 'bindtype'=>'d'),
+            'roomID'    => array('data'=>$roomID, 'bindtype'=>'i'),
+            'sortOrder' => array('data'=>$sortOrder, 'bindtype'=>'i'),
+            'isTotal'   => array('data'=>$isTotal, 'bindtype'=>'i'),
+            'isCredit'  => array('data'=>$isCredit, 'bindtype'=>'i'),
+            'paymentID' => array('data'=>$paymentID, 'bindtype'=>'i'),
+        );
+        return $this->dbe->insertRow('bookingTotals', $data);
+
+    }
+
+    /**
      * Process the payment
      * @return mixed
      */
-    public function makePayment()
+    public function makePayment($amount, $cardNum, $expDate, $cvv, $bookingID, $detail, $guest)
     {
         $anet = new authorizenetAPI();
 
-        // For testing:
-        $_SESSION['guest']['zip'] = '46282'; // declined
-        // print_r($_SESSION['guest']);exit;
-
         $response = $anet->chargeCreditCard(
-                            $_SESSION['amountPaid'],
-                            $_POST['cardNum'],
-                            $_POST['expDate'],
-                            $_POST['cvv'],
-                            $_SESSION['booking']['bookingID'],
-                            'Booking', // todo add more detail?
-                            $_SESSION['guest']
+                            $amount,
+                            $cardNum,
+                            $expDate,
+                            $cvv,
+                            $bookingID,
+                            $detail,
+                            $guest
         );
 
         if ($response != null) {
@@ -583,9 +684,10 @@ class PLManager
      * @param string $checkIn
      * @param string $checkOut
      * @param int $roomID
+     * @param int $bookingID // if present, ignore this record
      * @return bool
      */
-    public function checkRoomAvailability($checkIn, $checkOut, $roomID)
+    public function checkRoomAvailability($checkIn, $checkOut, $roomID, $bookingID = 0)
     {
         // make sure there is no overlap with other bookings and that room isAvailable = true
         $room = $this->dbe->getRowWhere('rooms', 'roomID', $roomID);
@@ -601,9 +703,9 @@ class PLManager
             foreach ($period as $dt) {
                 $day = $dt->format("Y-m-d");
                 // check for any bookings for that date
-                $pq_query = 'SELECT * FROM `bookings` WHERE `roomID` = ? AND ? BETWEEN `checkIn` AND DATE_SUB(`checkOut`, INTERVAL 1 DAY) ';
-                $this->dbe->setBindtypes('is');
-                $this->dbe->setBindvalues(array($roomID, $day));
+                $pq_query = 'SELECT * FROM `bookings` WHERE `roomID` = ? AND ? BETWEEN `checkIn` AND DATE_SUB(`checkOut`, INTERVAL 1 DAY) AND `bookingID` <> ? ';
+                $this->dbe->setBindtypes('isi');
+                $this->dbe->setBindvalues(array($roomID, $day, $bookingID));
                 $foundRows = $this->dbe->execute_query($pq_query);
                 // if found, remove from array
                 if ($foundRows) {
@@ -636,7 +738,7 @@ class PLManager
      * Log Auth.Net responses
      * @param mixed $tresponse
      */
-    private function logResponse($tresponse)
+    public function logResponse($tresponse)
     {
         $data = array(
             'responseCode' => $tresponse->getResponseCode(),
@@ -668,7 +770,7 @@ class BookingTotal
         'total' => array('description'=>'Total','sortOrder'=>4,'isTotal'=>true,'isCredit'=>false),
         'dep'   => array('description'=>'Deposit','sortOrder'=>5,'isTotal'=>false,'isCredit'=>true),
         'pmt'   => array('description'=>'Payment','sortOrder'=>6,'isTotal'=>false,'isCredit'=>true),
-        'due'   => array('description'=>'Amount Due','sortOrder'=>7,'isTotal'=>true,'isCredit'=>false),
+        'due'   => array('description'=>'Amount Due','sortOrder'=>9,'isTotal'=>true,'isCredit'=>false),
     );
 
     public function __construct($itemType, $amount, $roomID)
@@ -690,6 +792,11 @@ class BookingTotal
     public function getBookingItem()
     {
         return $this->lineItem;
+    }
+
+    public function getType()
+    {
+        return $this->lineItem['itemType'];
     }
 
     public function getItemType()

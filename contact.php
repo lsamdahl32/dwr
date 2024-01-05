@@ -7,43 +7,47 @@
  * @created 3/29/2023
  */
 
-//require_once $_SERVER['DOCUMENT_ROOT'] .'/include/recaptcha/src/autoload.php';
-//$siteKeyv3 = '6LcfAeokAAAAAGJ9cS_B2Q0Bc2V5Snjt_Mqu54ou'; // v3
-//$secretv3 = '6LcfAeokAAAAAPGRs4433arw66iKFEr1b8WPSTW9';
+require_once $_SERVER['DOCUMENT_ROOT'] .'/dwr/includes/recaptcha/src/autoload.php';
+$siteKeyv3 = '6LcfAeokAAAAAGJ9cS_B2Q0Bc2V5Snjt_Mqu54ou'; // v3
+$secretv3 = '6LcfAeokAAAAAPGRs4433arw66iKFEr1b8WPSTW9';
 
 $msg = '';
-//if (isset($_POST['g-recaptcha-response'])) {
-if (isset($_POST['name'])) {
+if (isset($_POST['g-recaptcha-response'])) {
 
-//    $recaptcha = new \ReCaptcha\ReCaptcha($secretv3, new \ReCaptcha\RequestMethod\CurlPost());
+   $recaptcha = new \ReCaptcha\ReCaptcha($secretv3, new \ReCaptcha\RequestMethod\CurlPost());
     // Make the call to verify the response and also pass the user's IP address
-//    $resp = $recaptcha->setExpectedHostname($_SERVER["HTTP_HOST"]) // v3 (Lee) 11/9/22
-//    ->setExpectedAction('contact')
-//        ->setScoreThreshold(0.5)
-//        ->verify($_POST['g-recaptcha-response'], $_SERVER['REMOTE_ADDR']);
-//
-//    if ($resp->getScore() > .5 and $resp->getAction() == 'contact') {
-        // send an email to gleesoft@gleesoft.com containing the data
-        $sendTo = 'gleesoft@gleesoft.com';
-        $subject = 'Information Request from ' . $_POST['name'];
-        $body = 'DWR Contact Page Request<br><br>';
-        $body .= "From: " . $_POST['name'] . "<br>";
-        $body .= "Email: " . $_POST['email'] . "<br>";
-        $body .= "Question:<div>" . stripcslashes($_POST['description']) . "</div>";
+   $resp = $recaptcha->setExpectedHostname($_SERVER["HTTP_HOST"]) // v3 (Lee) 11/9/22
+   ->setExpectedAction('contact')
+       ->setScoreThreshold(0.5)
+       ->verify($_POST['g-recaptcha-response'], $_SERVER['REMOTE_ADDR']);
+
+   if ($resp->getScore() > .5 and $resp->getAction() == 'contact') {
+        if (strlen($_POST['name']) > 0 and strlen($_POST['email']) > 0 and strlen($_POST['question']) > 0) {
+            // send an email to gleesoft@gleesoft.com containing the data
+            $sendTo = 'gleesoft@gleesoft.com';
+            $subject = 'Information Request from ' . $_POST['name'];
+            $body = 'DWR Contact Page Request<br><br>';
+            $body .= "From: " . $_POST['name'] . "<br>";
+            $body .= "Email: " . $_POST['email'] . "<br>";
+            $body .= "Question:<div>" . stripcslashes($_POST['question']) . "</div>";
 
 
-        $headers = "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        if (mail($sendTo, $subject, $body, $headers)) {
-            $msg = 'Thank you for sending your message to Desert Willow Ranch.';
+            $headers = "MIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+            if (mail($sendTo, $subject, $body, $headers)) {
+                $msg = 'Thank you for sending your message to Desert Willow Ranch.';
+            }
+        } else {
+            $msg = 'Please fill out all fields.';
         }
-//    } else {
-//        // an error has occurred
-//        echo 'A Recaptcha error has occurred. ' . $resp->getScore();
-//    }
+   } else {
+       // an error has occurred
+       echo 'A Recaptcha error has occurred. ' . $resp->getScore();
+   }
 }
 
-$additionalHeaders = '';
+$additionalHeaders = '
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>';
 require_once('./page_header.php');
 require_once('./page_nav.php');
 ?>
@@ -76,25 +80,25 @@ require_once('./page_nav.php');
                 </div>
             </div>
             <div class="form_rows">
-                <label for="description" class="form_label" style="align-self: flex-start;">Question</label>
+                <label for="question" class="form_label" style="align-self: flex-start;">Question</label>
                 <div class="form_cell">
-                    <textarea name="description" id="description" style="width: 90%; max-width: 600px; height: 200px;" required></textarea>
+                    <textarea name="question" id="question" style="width: 90%; max-width: 600px; height: 200px;" required></textarea>
                     <span class="form_error">*</span>
                 </div>
             </div>
             <div class="form_rows">
                 <div class="form_label"></div>
                 <div class="form_cell">
-<!--                    <button name="submitForm" class="buttonBar g-recaptcha"-->
-<!--                            data-sitekey="--><?//=$siteKeyv3?><!--"-->
-<!--                            data-action="contact"-->
-<!--                            data-callback="onSubmit"-->
-<!--                            data-theme="dark"  style="padding: 4px 14px;">-->
-<!--                        <i class="bi-box-arrow-up"></i>&nbsp;Submit-->
-<!--                    </button>-->
-                    <button name="submitForm" type="submit">
+                   <button name="submitForm" class="buttonBar g-recaptcha"
+                           data-sitekey="<?=$siteKeyv3?>"
+                           data-action="contact"
+                           data-callback="onSubmit"
+                           data-theme="dark" >
+                           Submit
+                   </button>
+                    <!-- <button name="submitForm" type="submit">
                         Submit
-                    </button>
+                    </button> -->
                 </div>
             </div>
             <span class="form_error">* = Required</span>

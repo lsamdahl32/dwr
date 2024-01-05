@@ -132,7 +132,7 @@ require_once('./page_footer.php');
                                 '<div class="room_info">' +
                                 '<h2>' + obj['rooms'][key]['roomName'] + '</h2>' +
                                 '<p class="room_description">' + obj['rooms'][key]['details'] + '</p>' +
-                                '<p class="room_amenities">Amenities</p>' +
+                                '<p class="room_amenities"></p>' +
                                 '<a class="more_info" href="./room_details.php?roomID=' + obj['rooms'][key]['roomID'] + '">More info >></a>' +
                                 '<div class="room_price_line">From <span class="room_price">$' + obj['rooms'][key]['price'] + '</span> per night</div>' +
                                 '<button type="button" class="book_now_btn" data-roomID="' + obj['rooms'][key]['roomID'] + '">Book Now</button>' +
@@ -170,6 +170,10 @@ require_once('./page_footer.php');
             post_to_url('booking.php?action=booking_account', data, 'post', '_self'); // redirect to booking_account.php
         });
 
+        // preload the search if dates are already set
+        if ($("#check_in").val() !== '' && $("#check_out").val() !== '') {
+            $("#btnSearch").click();
+        }
     });
 
     function updateDates() {
@@ -187,4 +191,5 @@ require_once('./page_footer.php');
             }
         });
     }
+
 </script>

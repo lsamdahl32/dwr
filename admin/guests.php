@@ -47,6 +47,7 @@ $atr->setWhere(array('guestID <> 1')); // do not show the special "Admin Blackou
 
 $hasTabbar = array(
     'boo' => array('name'=>'Bookings', 'function'=>'showBookings', 'elementID'=>'showBookings', 'width'=>''),
+    'pay' => array('name'=>'Payments', 'function'=>'showPayments', 'elementID'=>'showPayments', 'width'=>''),
 );
 $tabbarCallback = 'tabbarCallbackgue';
 $tabbarBodyID = 'tab_body_gue';
@@ -83,16 +84,12 @@ $atr->process();
         $("#breadcrumbs").html(' <?=BI_CARET_RIGHT?>' + " "+rmgue.settings.subTitle);
         if (currTabID === 'boo') {
             atst_boo.tabbarCallback(curId);
+
+        } else if (currTabID === 'pay') {
+            atst_pay.tabbarCallback(curId);
         }
     }
-    //
-    // $(document).ready(function () {
-    //     $(window).resize(function () {
-    //         var frame = $('#guestsView iframe', window.parent.document);
-    //         var height = $(this).height();
-    //         frame.height(height + 15);
-    //     });
-    // });
+    
 </script>
 <?php
 
@@ -153,6 +150,45 @@ function showBookings($id)
     $mres->setLinkField('guestID');
     $mres->setLinkID($id);
     $mres->setRtEmptyMessage('No bookings have been added for this guest.');
+
+    $mres->process();
+
+}
+
+function showPayments($id)
+{
+    global $db;
+
+    $table = 'payments';
+    $keyField = 'paymentID';
+    $keyFieldType = 'i';
+    $nameModifier = 'pay'; // should be same as table and tab
+    $orderBy = array('paidOn DESC','','');
+
+    $rt2 = new ReportTable($db, $table, $keyField, $nameModifier, basename($_SERVER['PHP_SELF']));
+
+    $rt2->setQryOrderBy($orderBy); // default sort order
+
+    $rt2->addColumn(array('field'=>'paymentID', 'heading'=>'Action', 'type'=>'callback:selectRow_pay', 'format'=>'Edit', 'width'=>'.6', 'search'=>false, 'edit'=>false, 'show'=>true));
+    $rt2->addColumn(array('field' => 'bookingID', 'heading' => 'Booking', 'type' => 'i', 'lookup'=>'SELECT b.`bookingID` as id, concat(b.`checkIn`,"-",g.`lastName`) as item FROM `bookings` b INNER JOIN `guests` g ON g.`guestID` = b.`guestID` ORDER BY `checkIn` DESC',
+                        'width' => 2, 'default'=>'parentID', 'search' => true, 'sort'=>true, 'edit' => false, 'showEdit'=>true, 'editAdd'=>true, 'show' => true, 'required'=>true));
+    $rt2->addColumn(array('field'=>'guestID', 'heading'=>'Guest', 'type'=>'i', 'lookup'=>'SELECT `guestID` AS id, concat(firstName," ", lastName) AS item FROM `guests` WHERE 1 ',
+                        'width'=>'2.2', 'profile'=>true, 'profileOrder'=>4, 'saveAdd'=>true, 'search'=>false, 'sort'=>true, 'showEdit'=>true, 'edit'=>false, 'editadd'=>true, 'show'=>true, 'required'=>true));
+    $rt2->addColumn(array('field'=>'type', 'heading'=>'Type', 'type'=>'s', 'width'=>'1', 'format'=>'', 'profile'=>true, 'profileOrder'=>8, 'search'=>false, 'showEdit'=>true, 'edit'=>false, 'sort'=>true, 'show'=>true, 'default'=>2, 'required'=>true));
+    $rt2->addColumn(array('field' => 'amount', 'heading' => 'Amount', 'type' => 'i', 'format'=>'currency', 'step'=>.01, 'profileOrder'=>3, 'width' => 1, 'search' => true, 'showEdit'=>true, 'edit' => false, 'show' => true));
+    $rt2->addColumn(array('field'=>'paymentStatusID', 'heading'=>'Pmt Status', 'type'=>'i', 'width'=>'1', 'lookup'=> 'SELECT `paymentStatusID` AS id, `status` AS item FROM `paymentStatus` WHERE 1', 'format'=>'', 'profile'=>true, 'profileOrder'=>8, 'search'=>false, 'edit'=>true, 'sort'=>true, 'show'=>true, 'default'=>2, 'required'=>true));
+    $rt2->addColumn(array('field'=>'paidBy', 'heading'=>'Paid By', 'type'=>'s', 'width'=>'1', 'format'=>'', 'profile'=>true, 'profileOrder'=>9, 'search'=>true, 'showEdit'=>true, 'edit'=>false, 'sort'=>true, 'show'=>true));
+    $rt2->addColumn(array('field'=>'txnID', 'heading'=>'Trans ID', 'type'=>'s', 'width'=>'1', 'format'=>'', 'profile'=>true, 'profileOrder'=>10, 'search'=>true, 'showEdit'=>true, 'edit'=>false, 'sort'=>true, 'show'=>true));
+    $rt2->addColumn(array('field' => 'paidOn', 'heading'=>'Date', 'type'=>'d', 'width'=>'1.2', 'format'=>'m/d/Y H:i:s', 'search'=>false, 'showEdit'=>true, 'edit'=>false, 'sort'=>true, 'show'=>true));
+
+    $mres = new ATSubTable($db, $rt2, array('list','edit'), $table, $keyField, $keyFieldType, $nameModifier);
+
+    $mres->setAllowAll(true);
+    $mres->setAllowDelete(false);
+    $mres->setAllowEditing(true);
+    $mres->setLinkField('guestID');
+    $mres->setLinkID($id);
+    $mres->setRtEmptyMessage('No payments have been made for this guest.');
 
     $mres->process();
 

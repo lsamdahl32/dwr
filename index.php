@@ -25,6 +25,20 @@ require_once('./page_nav.php');
                 <div id="home_page_photo_container">
                     <img src="images/barn_with_wagon.png" width="100%" />
                 </div>
+
+                <article>                    
+                    <p>The Desert Willow Ranch is an authentic horse ranch located on the east side of Tucson, Arizona. It is nestled beneath the 
+                        Rincón Mountains to the east and the Catalina Mountains to the north.</p>
+                    <p>The original ranch house has been remodeled to include two deluxe rooms with private entrances.</p>
+                    <p>A pad has been added for RV campers with full hookups.</p>
+                </article>
+
+                <article>
+                    <h2>Bring Your Horse</h2>
+                    <p>The picturesque barn has been updated with two high-quality horse stalls. Pens and an arena are also available.</p>
+                    <p>Please contact us to enquire about adding your horse to your stay with us.</p>
+                </article>
+                
                 <article>
                     <h2>History</h2>
                     <div style="display: flex; gap: 2rem; align-items: center;">
@@ -36,7 +50,7 @@ require_once('./page_nav.php');
                         </p>
                     </div>
                 </article>
-
+<!-- 
                 <article>
                     <h2>Stuff!</h2>
                     <p>…</p>
@@ -44,7 +58,8 @@ require_once('./page_nav.php');
                     <p>…</p>
                     <p>…</p>
                     <p>…</p>
-                </article>
+                </article> -->
+
 
                 <article>
                     <h2>Location</h2>
@@ -54,13 +69,6 @@ require_once('./page_nav.php');
                     </p>
                 </article>
 
-                <article>
-                    <h2>Bring Your Horse</h2>
-                    <p>…</p>
-                    <p>…</p>
-                    <p>…</p>
-                    <p>…</p>
-                </article>
             </main>
 <?php
 

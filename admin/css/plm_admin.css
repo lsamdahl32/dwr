@@ -1069,7 +1069,7 @@ legend {
     border: none;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
-    background-color: var(--past-background);
+    background-color: var(--gradient-right);
     cursor: pointer;
     position: relative;
     z-index: 101;
@@ -1112,6 +1112,18 @@ legend {
     color: grey !important;
 }
 
+#makeAPayment {
+    padding: 1rem;
+    z-index: 1000;
+    text-align: center;
+    border-radius: 6px;
+}
+
+#makeAPayment > div {
+    text-align: left;
+    width: fit-content;
+    margin: 0 auto;
+}
 
 /* JQ Modal Styles */
 #jqConfDialog {

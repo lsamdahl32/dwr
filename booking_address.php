@@ -72,7 +72,7 @@ require_once('./page_nav.php');
                     </button>
                 </div>
             <?php } ?>
-            <form action="booking.php?action=booking_payment" id="billing_address" method="post" accept-charset="UTF-8">
+            <form action="booking.php?action=booking_amenities" id="billing_address" method="post" accept-charset="UTF-8">
                 <input type="hidden" name="transID" value="<?=$_SESSION['transID']?>" />
                 <input type="hidden" name="page_from" value="billing_address" />
                 <h3>Billing Address</h3>

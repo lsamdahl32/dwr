@@ -75,7 +75,7 @@ header nav {
     width: 196px;
     /*background-color: #c4c4be;*/
     background-color: rgba(196,196,190,0.9);
-    transition: left 500ms ease-in-out;
+    transition: left 300ms ease-in-out;
     /*-webkit-border-radius: 0 0 3px 0;*/
     /*-moz-border-radius: 0 0 3px 0;*/
     /*border-radius: 0 0 3px 0;*/
@@ -83,7 +83,7 @@ header nav {
 }
 
 nav a {
-    transition: background-color 500ms ease-in-out;
+    transition: background-color 300ms ease-in-out;
 }
 
 nav a:hover, nav a:active {
@@ -123,7 +123,7 @@ footer {
 input, select, textarea {
     border: 1px solid #ccc;
     padding: 4px;
-    transition: background-color 500ms ease-in-out;
+    transition: background-color 300ms ease-in-out;
     background-color: gainsboro;
     cursor: pointer;
 }
@@ -218,7 +218,7 @@ div.room_details_col_1 {
 }
 
 button {
-    transition: background-color 500ms ease-in-out;
+    transition: background-color 300ms ease-in-out;
     cursor: pointer;
     border: 1px solid #ccc;
     padding: 8px;
@@ -304,12 +304,25 @@ address#contact_page {
     margin: 0;
     padding: 0;
 }
+#booking_summary {
+    display: flex; 
+    flex-flow: row wrap; 
+    justify-content: space-between;
+}
+#extraItems {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.deleteAmenity {
+    color: red;
+}
 .order_total {
     padding: 2px 0 3px 0;
-    display: flex;
+    /* display: flex;
     flex-flow: row wrap;
     justify-content: flex-end;
-    align-items: baseline;
+    align-items: baseline; */
     width: 100%;
     margin-bottom: 8px;
 }
@@ -372,7 +385,7 @@ address#contact_page {
         height: auto;
         /*background-color: #c4c4be;*/
         background-color: rgba(196,196,190,0.9);
-        transition: left 500ms ease-in-out;
+        transition: left 300ms ease-in-out;
         -webkit-border-radius: 0 0 3px 0;
         -moz-border-radius: 0 0 3px 0;
         border-radius: 0 0 3px 0;
@@ -422,6 +435,9 @@ address#contact_page {
 
     #billing_address > div {
         flex-basis: 48%;
+    }
+    #booking_summary_left {
+        flex-basis: 60%;
     }
 
     footer {

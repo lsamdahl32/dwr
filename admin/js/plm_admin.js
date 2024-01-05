@@ -80,6 +80,7 @@ function searchForBookings() {
  */
 function checkLoginStatus(data) {
     if (typeof data === 'string') {
+        // Disabled in this project
         // if (data.substring(0, 42) === "<meta http-equiv='refresh' content='0;url=") {
         //     let calledFrom = decodeURI(data.substring(data.indexOf('?calledFrom'), (data.length - 4))); // sent from pageHeader?
         //     document.location = '/login.php' + calledFrom;

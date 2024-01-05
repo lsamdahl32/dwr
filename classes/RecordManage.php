@@ -229,7 +229,7 @@ class RecordManage
                 // user double-clicked! ignore.
             }
         } else {
-            $errormsg = 'The record was NOT saved. See below:';
+            $errormsg = 'The record was NOT saved. See below:'.print_r($this->errorArray, 1);
         }
         return $errormsg;
     }
@@ -449,12 +449,12 @@ class RecordManage
 
     /**
      * @param array $column_array
-     * @return string
+     * @return array
      */
-    public function getProfileJSON(array $column_array):string
+    public function getProfileJSON(array $column_array):array
     {
         global $currencySymbol;
-        $output = array('msg'=>$this->getMsg(), $this->keyField=>$this->currentID);
+        $output = array($this->keyField=>$this->currentID);
         if (!isset($currencySymbol)) $currencySymbol = CURRENCY_SYMBOL;
         foreach ($column_array as $col) {
             if (((($col['profile'] and $this->mode != 'add') or $col['edit'])
@@ -471,7 +471,7 @@ class RecordManage
                 }
             }
         }
-        return json_encode($output);
+        return $output;
     }
 
     /**
@@ -1167,7 +1167,7 @@ class RecordManage
                 $this->setMode('view');
                 $row = $this->dbe->getRowWhere($this->table, $this->keyField, $id);
                 $this->loadRecord($row, $column_array);
-                echo $this->getProfileJSON($column_array);
+                echo json_encode(array_merge(array('msg'=>$this->getMsg()), $this->getProfileJSON($column_array)));
                 exit;
 
             } elseif ($_POST['rm_process'] == 'getEditPage') { // new faster way to display an edit page 6/28/21
@@ -1192,7 +1192,8 @@ class RecordManage
                     // get the full record
                     $row = $this->dbe->getRowWhere($this->table, $this->keyField, $this->getCurrentID());
                     if ($mode != 'add') $this->loadRecord($row, $column_array);
-                    echo $this->getProfileJSON($column_array);
+                    // echo $this->getProfileJSON($column_array);
+                    echo json_encode(array_merge(array('result'=>'Success','msg'=>$this->getMsg()), $this->getProfileJSON($column_array)));
                 } else {
                     echo json_encode(array_merge(array('msg' => $this->getMsg()), $this->getErrorArray()));
                 }

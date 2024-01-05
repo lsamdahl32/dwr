@@ -42,35 +42,38 @@ require_once('./page_nav.php');
                     <?=$_SESSION['txnID']?>
                 </div>
             </div>
-            <div class="form_rows">
-                <label for="name" class="form_label">Room</label>
-                <div class="form_cell">
-                    <?=$room['roomName']?>
-                </div>
-            </div>
-            <div class="form_rows">
-                <label for="name" class="form_label">Check In/Out</label>
-                <div class="form_cell">
-                    <div><span id="date_range"><?=$dateRange['range']?></span> | <span id="num_nights"><?=$dateRange['nights']?></span> night(s)</div>
-                </div>
-            </div>
-            <div class="form_rows">
-                <label for="name" class="form_label">Extra Items</label>
-                <div class="form_cell">
-                    None
-                </div>
-            </div>
-            <?php foreach ($_SESSION['bookingTotals'] as $key => $bt_item) {
-                $item = unserialize($bt_item); ?>
-                <div class="order_total <?=($item->getIsTotal())?'total_line':''?>">
-                    <div class="form_label"><?=$item->getItemType()?></div>
-                    <div class="form_cell">
-                        $<?=number_format($item->getAmount(), 2)?>
+            <div id="booking_summary">
+                <div id="booking_summary_left">
+                    <div class="form_rows">
+                        <label for="name" class="form_label">Room</label>
+                        <div class="form_cell">
+                            <?=$room['roomName']?>
+                        </div>
                     </div>
+                    <div class="form_rows">
+                        <label for="name" class="form_label">Check In/Out</label>
+                        <div class="form_cell">
+                            <div><span id="date_range"><?=$dateRange['range']?></span> | <span id="num_nights"><?=$dateRange['nights']?></span> night(s)</div>
+                        </div>
+                    </div>            
                 </div>
-            <?php } ?>
+                <div>
+                    <?php foreach ($_SESSION['bookingTotals'] as $key => $bt_item) {
+                        $item = unserialize($bt_item); 
+                        if ($item->getAmount() != 0) {
+                            ?>
+                            <div class="order_total <?=($item->getIsTotal())?'total_line':''?>">
+                                <div class="form_label"><?=$item->getItemType()?></div>
+                                <div class="form_cell">
+                                    $<?=number_format($item->getAmount(), 2)?>
+                                </div>
+                            </div>
+                            <?php 
+                        }
+                    } ?>
+                </div>
+            </div>
         </section>
-
 
     </main>
 <?php

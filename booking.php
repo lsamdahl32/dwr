@@ -9,9 +9,9 @@
  * @created 4/4/23
  *
  */
-//ini_set('display_errors', 1); // todo remove for live version
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
+// ini_set('display_errors', 1); // todo remove for live version
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 require_once ($_SERVER['DOCUMENT_ROOT'] . '/dwr/includes/general_functions.php');
 require_once ($_SERVER['DOCUMENT_ROOT'] . '/dwr/classes/PLManager.php');
@@ -52,7 +52,7 @@ $price = $plm->getRoomPrice($roomID, $checkIn);
 
 $subtotal = $price * $dateRange['nights'];
 $additional = 0;  // todo Additional Charges
-$tax = 0; // todo taxes
+$tax = (TAX_RATE * ($subtotal + $additional)) + TAX_ADDL; // taxes
 $total = $subtotal + $additional + $tax;
 if (ALLOW_DEPOSITS and DEPOSIT_TYPE == "Percent") {
     $deposit = (round($total * (DEPOSIT_PERCENT / 100), 2));
@@ -66,6 +66,8 @@ if ($deposit > 0) {
 } else {
     $balanceDue = $total;
 }
+// get optional amenities into array
+$amenities = $plm->getOptionalAmenities();
 
 switch ($_GET['action']) {
     case 'booking_account':
@@ -89,6 +91,7 @@ switch ($_GET['action']) {
         }
         $_SESSION['checkIn'] = $checkIn;
         $_SESSION['checkOut'] = $checkOut;
+        $_SESSION['nights'] = $dateRange['nights'];
         $_SESSION['roomType'] = $roomType;
         $_SESSION['roomID'] = $roomID;
 
@@ -181,7 +184,7 @@ switch ($_GET['action']) {
                 'contactBy' => $_POST['contactBy'],
             );
         }
-        if (count($msg) > 0) {
+                if (count($msg) > 0) {
             // go back to fix errors
             include 'booking_address.php';
         } else {

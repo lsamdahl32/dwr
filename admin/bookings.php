@@ -237,6 +237,7 @@ $atr->process();
                 if (result === 'Success') {
                     atst_amen.tabbarCallback(curId);
                     getAvailableAmenities();
+                    $("#recalcBookingTotals").click();
                 } else {
                     jqAlert(result);
                 }
@@ -348,9 +349,6 @@ $atr->process();
         } else if (currTabID === 'amen') {
             // refresh the grid
             atst_amen.tabbarCallback(curId);
-            // rtamen.setLinkID(curId);
-            // rtamen.refresh();
-            // rtamen.setResizable();
             getAvailableAmenities();
             
         } else if (currTabID === 'tot') {
@@ -380,10 +378,8 @@ $atr->process();
         }, function (result) {
             if (result === 'Success') {
                 atst_amen.tabbarCallback(curId);
-                // rtamen.setLinkID(curId);
-                // rtamen.refresh();
-                // rtamen.setResizable();
                 getAvailableAmenities();
+                $("#recalcBookingTotals").click();
             }
         });
     }
@@ -564,17 +560,24 @@ function getAvailableAmenities($id)
     global $db;
 
     $dbe = new DBEngine($db);
+    // do not include amenities already in the guest's account
     $pq_query = 'SELECT a.* FROM `amenities` a LEFT JOIN `bookingAmenities` b ON b.`amenityID` = a.`amenityID` WHERE a.`isOptional` = ? AND (b.`amenityID` IS NULL OR b.`bookingID` <> ?) ORDER BY a.`sortOrder` ';
     $dbe->setBindtypes('ii');
     $dbe->setBindvalues(array(1, $id));
     $amens = $dbe->execute_query($pq_query);
-    $dbe->close();
     echo '<option value="0">None</option>';
     if ($amens) {
         foreach ($amens as $item) {
-            echo '<option value="' . $item['amenityID'] . '">' . $item['amenity'] . '</option>';
+            $pq_query = 'SELECT * FROM `bookingAmenities` WHERE `bookingID` = ? AND `amenityID` = ? ';
+            $dbe->setBindtypes('ii');
+            $dbe->setBindvalues(array($id, $item['amenityID']));
+            $alreadyAdded = $dbe->execute_query($pq_query);
+            if (!$alreadyAdded) {
+                echo '<option value="' . $item['amenityID'] . '">' . $item['amenity'] . '</option>';
+            }
         }
     }
+    $dbe->close();
 }
 
 function addAmenity()
@@ -637,7 +640,7 @@ function showAmenities($id)
 
     $rt2->setQryOrderBy($orderBy); // default sort order
 
-    $rt2->addColumn(array('field' => 'bookingAmenityID', 'heading'=>'Action', 'type'=>'callback:deleteAmenities', 'format'=>'Delete', 'altIcon'=>'<i class="bi-x-circle smaller_icon" style="color: darkred;"></i>', 'width'=>'.6', 'search'=>false, 'edit'=>false, 'show'=>true, 'required'=>false));
+    $rt2->addColumn(array('field' => 'bookingAmenityID', 'heading'=>'Action', 'type'=>'callback:deleteAmenities', 'format'=>'Delete', 'altIcon'=>'<i class="bi-x-octagon smaller_icon" style="color: darkred;"></i>', 'width'=>'.6', 'search'=>false, 'edit'=>false, 'show'=>true, 'required'=>false));
     $rt2->addColumn(array('field' => 'bookingID', 'heading' => 'Booking', 'type' => 'i', 'lookup'=>'SELECT b.`bookingID` as id, concat(b.`checkIn`,"-",g.`lastName`) as item FROM `bookings` b INNER JOIN `guests` g ON g.`guestID` = b.`guestID` ORDER BY `checkIn` DESC',
                           'width' => 2, 'default'=>'parentID', 'search' => true, 'edit' => false, 'showEdit'=>true, 'editAdd'=>true, 'show' => true, 'required'=>true));
     $rt2->addColumn(array('field' => 'amenityID', 'heading' => 'Amenity', 'type' => 'i', 'lookup'=>'SELECT `amenityID` as id, `Amenity` as item FROM `amenities` ORDER BY `sortOrder`','format'=>'', 'useKeys'=>true, 'width' => 1.2, 'search' => true, 'edit' => true, 'show' => true));
@@ -862,11 +865,11 @@ function showPayments($id)
     $rt2->setQryOrderBy($orderBy); // default sort order
 
     $rt2->addColumn(array('field'=>'paymentID', 'heading'=>'Action', 'type'=>'callback:selectRow_pay', 'format'=>'Edit', 'width'=>'.6', 'search'=>false, 'edit'=>false, 'show'=>true));
-    $rt2->addColumn(array('field' => 'bookingID', 'heading' => 'Booking', 'type' => 'i', 'lookup'=>'SELECT b.`bookingID` as id, concat(b.`checkIn`,"-",g.`lastName`) as item FROM `bookings` b INNER JOIN `guests` g ON g.`guestID` = b.`guestID` ORDER BY `checkIn` DESC',
-                        'width' => 2, 'default'=>'parentID', 'search' => true, 'edit' => false, 'showEdit'=>true, 'editAdd'=>true, 'show' => true, 'required'=>true));
-    $rt2->addColumn(array('field'=>'guestID', 'heading'=>'Guest', 'type'=>'i', 'lookup'=>'SELECT `guestID` AS id, concat(firstName," ", lastName) AS item FROM `guests` WHERE 1 ',
-                        'width'=>'2.2', 'profile'=>true, 'profileOrder'=>4, 'saveAdd'=>true, 'search'=>false, 'sort'=>true, 'showEdit'=>true, 'edit'=>false, 'editadd'=>true, 'show'=>true, 'required'=>true));
-    $rt2->addColumn(array('field'=>'type', 'heading'=>'Type', 'type'=>'s', 'width'=>'1', 'format'=>'', 'profile'=>true, 'profileOrder'=>8, 'search'=>false, 'showEdit'=>true, 'edit'=>false, 'sort'=>true, 'show'=>true, 'default'=>2, 'required'=>true));
+    // $rt2->addColumn(array('field' => 'bookingID', 'heading' => 'Booking', 'type' => 'i', 'lookup'=>'SELECT b.`bookingID` as id, concat(b.`checkIn`,"-",g.`lastName`) as item FROM `bookings` b INNER JOIN `guests` g ON g.`guestID` = b.`guestID` ORDER BY `checkIn` DESC',
+    //                     'width' => 2, 'default'=>'parentID', 'search' => true, 'edit' => false, 'showEdit'=>true, 'editAdd'=>true, 'show' => true, 'required'=>true));
+    // $rt2->addColumn(array('field'=>'guestID', 'heading'=>'Guest', 'type'=>'i', 'lookup'=>'SELECT `guestID` AS id, concat(firstName," ", lastName) AS item FROM `guests` WHERE 1 ',
+    //                     'width'=>'2.2', 'profile'=>true, 'profileOrder'=>4, 'saveAdd'=>true, 'search'=>false, 'sort'=>true, 'showEdit'=>true, 'edit'=>false, 'editadd'=>true, 'show'=>true, 'required'=>true));
+    $rt2->addColumn(array('field'=>'type', 'heading'=>'Type', 'type'=>'s', 'width'=>'.6', 'format'=>'', 'profile'=>true, 'profileOrder'=>8, 'search'=>false, 'showEdit'=>true, 'edit'=>false, 'sort'=>true, 'show'=>true, 'default'=>2, 'required'=>true));
     $rt2->addColumn(array('field' => 'amount', 'heading' => 'Amount', 'type' => 'i', 'format'=>'currency', 'step'=>.01, 'profileOrder'=>3, 'width' => 1, 'search' => true, 'showEdit'=>true, 'edit' => false, 'show' => true));
     $rt2->addColumn(array('field'=>'paymentStatusID', 'heading'=>'Pmt Status', 'type'=>'i', 'width'=>'1', 'lookup'=> 'SELECT `paymentStatusID` AS id, `status` AS item FROM `paymentStatus` WHERE 1', 'format'=>'', 'profile'=>true, 'profileOrder'=>8, 'search'=>false, 'edit'=>true, 'sort'=>true, 'show'=>true, 'default'=>2, 'required'=>true));
     $rt2->addColumn(array('field'=>'paidBy', 'heading'=>'Paid By', 'type'=>'s', 'width'=>'1', 'format'=>'', 'profile'=>true, 'profileOrder'=>9, 'search'=>true, 'showEdit'=>true, 'edit'=>false, 'sort'=>true, 'show'=>true));
@@ -913,7 +916,7 @@ function makePayment()
         if ($guest) {              
             switch ($paymentType) {
                 case 'cash':
-                    $paymentID = $plm->savePaymentRecord($bookingID, $guest['guestID'], $amount, $paymentType);
+                    $paymentID = $plm->savePaymentRecord($bookingID, $guest['guestID'], $amount, $paymentType, 'Cash');
                     if ($paymentID > 0) {
                         $msg[] = 'Success';
                     } else {
@@ -922,7 +925,7 @@ function makePayment()
                     break;
                 case 'check':
                     if (!$checkNumber == '') {
-                        $paymentID = $plm->savePaymentRecord($bookingID, $guest['guestID'], $amount, $paymentType, $checkNumber);
+                        $paymentID = $plm->savePaymentRecord($bookingID, $guest['guestID'], $amount, $paymentType, 'Check #' . $checkNumber);
                         if ($paymentID > 0) {
                             $msg[] = 'Success';
                         } else {
@@ -965,9 +968,9 @@ function makePayment()
                                 case 1: // the payment was approved
                                     $paymentStatus = $plm::PMT_STATUS_COMPLETED;
                                     $txnID = $tresponse->getTransId();
-                                    $paidBy = 'card-' . substr($cardNum, -4);
+                                    $paidBy = 'Card-' . substr($cardNum, -4);
                                     
-                                    $paymentID = $plm->savePaymentRecord($bookingID, $guest['guestID'], $amount, $paymentType, $checkNumber, $paidBy, $paymentStatus, $txnID);
+                                    $paymentID = $plm->savePaymentRecord($bookingID, $guest['guestID'], $amount, $paymentType, $paidBy, $paymentStatus, $txnID);
                                     if ($paymentID > 0) {
                                         $msg[] = 'Success';
                                     } else {

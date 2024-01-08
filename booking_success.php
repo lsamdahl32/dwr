@@ -60,7 +60,7 @@ require_once('./page_nav.php');
                 <div>
                     <?php foreach ($_SESSION['bookingTotals'] as $key => $bt_item) {
                         $item = unserialize($bt_item); 
-                        if ($item->getAmount() != 0) {
+                        if ($item->getAmount() != 0 or $item->getIsTotal()) {
                             ?>
                             <div class="order_total <?=($item->getIsTotal())?'total_line':''?>">
                                 <div class="form_label"><?=$item->getItemType()?></div>

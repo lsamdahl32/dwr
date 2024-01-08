@@ -266,7 +266,6 @@ class PLManager
                                 $_SESSION['guest']['guestID'], 
                                 $totalCharge, 'credit', 
                                 'card-' . substr($_POST['cardNum'], -4), 
-                                '', 
                                 $_SESSION['paymentStatus'], 
                                 ''
                             );
@@ -325,8 +324,13 @@ class PLManager
                                 // log the response
                                 $this->logResponse($tresponse);
                                 $_SESSION['booking'] = $this->getBookingInfo($bookingID);
+                                // send an email to the guest with confirmation info
+                                $this->sendEmailReceipt();
                                 unset($_SESSION['errorCode']);
                                 unset($_SESSION['errorMessage']);
+                                unset($_POST['cardNum']);
+                                unset($_POST['cvv']);
+                                unset($_POST['expDate']);
                                 return true;
                             } else {
                                 // This should not happen!
@@ -524,7 +528,7 @@ class PLManager
         return 0;
     }
 
-    public function savePaymentRecord($bookingID, $guestID, $amount, $paymentType, $checkNumber = '', $paidBy = '', $paymentStatus = 0, $txnID = '')
+    public function savePaymentRecord($bookingID, $guestID, $amount, $paymentType, $paidBy = '', $paymentStatus = 0, $txnID = '')
     {
         $data = array(
             'bookingID' => array('data'=>$bookingID, 'bindtype'=>'i'), 
@@ -533,7 +537,6 @@ class PLManager
             'amount' => array('data'=>$amount, 'bindtype'=>'d'), 
             'paidBy' => array('data'=>$paidBy, 'bindtype'=>'s'), 
             'txnID' => array('data'=>$txnID, 'bindtype'=>'s'),
-            'checkNumber' => array('data'=>$checkNumber, 'bindtype'=>'s'), 
             'paymentStatusID' => array('data'=>$paymentStatus, 'bindtype'=>'i'), 
         );
         return $this->dbe->insertRow('payments', $data);
@@ -568,6 +571,7 @@ class PLManager
                     'amount' => array('data'=>$totalPaid, 'bindtype'=>'d'),
                     'paymentStatusID' => array('data'=>$_SESSION['paymentStatus'], 'bindtype'=>'s'),
                     'txnID' => array('data'=>$_SESSION['txnID'], 'bindtype'=>'s'), // this comes from cc processing service
+                    'paidBy' => array('data'=>'card-' . substr($_POST['cardNum'], -4), 'bindtype'=>'s'),
                 );
                 $result2 = $this->dbe->updateRow('payments', $data, 'paymentID', $paymentID);
                 // update the booking totals
@@ -756,6 +760,93 @@ class PLManager
             'networkTransid' => $tresponse->getNetworkTransId(),
         );
         $result = $this->dbe->insertRow('txnLog', $data);
+    }
+
+    public function sendEmailReceipt()
+    {
+        // include all important info such as the txnID and paidBy
+        $room = $this->getRoom($_SESSION['roomID']);        
+        $price = $this->getRoomPrice($_SESSION['roomID'], $_SESSION['checkIn']);
+        $body = '
+        <body style="background-color: #d6d6d6;">
+            <div style="background-color: #c7c7c1; text-align: center; width: 60%; margin 0 auto;">
+                <h1>The Desert Willow Ranch B&amp;B</h1>
+                <h2>An Authentic Horse Ranch in Tucson, Arizona.</h2>
+            </div>
+            <p>Dear ' . $_SESSION['guest']['firstName'] . ' ' . $_SESSION['guest']['lastName'] . ',</p>
+            <p>Thank you for choosing the Deserit Willow Ranch B&B for your upcoming visit to Tucson. Below is your reservation confirmation. To
+            change or cancel your reservation, please contact us at troy@dwrtucson.com.</p>
+            <div style="border-style:solid; border-width:1px; border-color: #d6d6d6;">
+                <h1>Reservation Confirmation</h1>
+                <h2>Booking Summary</h2>
+                <table>
+                    <tr>
+                        <td style="width: 110px;">Confirmation Number:</td>
+                        <td style="width: 110px;">' . $_SESSION['txnID'] . '</td>
+                        <td style="width: 110px;">Length of Stay:</td>
+                        <td style="width: 110px;">' . $_SESSION['nights'] . ' night(s)</td>
+                    </tr>
+                    <tr>
+                        <td>Arrival Date:</td>
+                        <td>' . date('F j, Y', strtotime($_SESSION['checkIn'])) . '</td>
+                        <td>Departure Date:</td>
+                        <td>' . date('F j, Y', strtotime($_SESSION['checkOut'])) . '</td>
+                    </tr>
+                    <tr>
+                        <td>Check In:</td>
+                        <td>' . CHECK_IN_TIME . '</td>
+                        <td>Check Out:</td>
+                        <td>' . CHECK_OUT_TIME . '</td>
+                    </tr>
+                </table>
+                <h2>Guest Information</h2>
+                <p>' . $_SESSION['guest']['firstName'] . ' ' . $_SESSION['guest']['lastName'] . '</p>
+                <p>' . $_SESSION['guest']['street'] . '</p>
+                <p>' . $_SESSION['guest']['city'] . ', ' . $_SESSION['guest']['state'] . ', ' . $_SESSION['guest']['country'] . ' ' . $_SESSION['guest']['zip'] . '</p>
+                <p>Email: ' . $_SESSION['guest']['email'] . '</p>
+                <p>Phone: ' . $_SESSION['guest']['phone'] . '</p>
+                <h2>Room Information and Rate</h2>                
+                <table>
+                    <tr>
+                        <td style="width: 100px;">Room Name:</td>
+                        <td style="width: 100px;">' . $room['roomName'] . '</td>
+                        <td style="width: 100px;">Type:</td>
+                        <td style="width: 100px;">' . $_SESSION['roomType'] . '</td>
+                    </tr>
+                    <tr>
+                        <td>Beds:</td>
+                        <td>' . $room['beds'] . '</td>
+                        <td>Rate:</td>
+                        <td>$' . $price . ' per Night</td>
+                    </tr>
+                </table>
+                <h2>Booking Totals</h2>
+                <table>
+                    <tr>
+                        <th><u>Item</u></th><th style="text-align: right;"><u>Total</u></th>
+                    </tr>
+                    ';
+                    foreach ($_SESSION['bookingTotals'] as $key => $bt_item) {
+                        $item = unserialize($bt_item); 
+                        if ($item->getAmount() != 0 or $item->getIsTotal()) {
+                            $body .='
+                            <tr>
+                                <td>' . $item->getItemType() . '</td>
+                                <td style="text-align: right;">$' . number_format($item->getAmount(), 2) . '</td>
+                            </div>';
+                        }
+                    }
+                    $body .='
+                </table>
+            </div>
+            <div style="text-align: center;">
+                <p><b>' . COMPANY_NAME . '</b></p>
+                <p>' . COMPANY_ADDRESS . ', Phone: ' . COMPANY_PHONE . '</p>
+                <p>Email: ' . COMPANY_EMAIL . '</p>
+            </div>
+        </body>
+        ';
+        send_email('lsamdahl@outlook.com', 'Desert Willow Ranch Confirmation', $body, '', '', '', true);
     }
 
 }

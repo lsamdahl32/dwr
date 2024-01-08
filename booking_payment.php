@@ -55,19 +55,19 @@ require_once('./page_nav.php');
             <div id="booking_summary">
                 <div id="booking_summary_left">
                     <div class="form_rows">
-                        <label for="name" class="form_label">Room</label>
+                        <div class="form_label">Room</div>
                         <div class="form_cell">
                             <?=$room['roomName']?>
                         </div>
                     </div>
                     <div class="form_rows">
-                        <label for="name" class="form_label">Check In/Out</label>
+                        <div class="form_label">Check In/Out</div>
                         <div class="form_cell">
                             <div><span id="date_range"><?=$dateRange['range']?></span> | <span id="num_nights"><?=$dateRange['nights']?></span> night(s)</div>
                         </div>
                     </div>
                     <div class="form_rows">
-                        <label for="name" class="form_label">Extra Items</label>
+                        <div class="form_label">Extra Items</div>
                         <div class="form_cell">
                             <p>Additional items are available to make your stay more enjoyable. Please <a href="contact.php" target="_blank">contact us</a> 
                             for availability and pricing.</p>
@@ -140,7 +140,7 @@ require_once('./page_nav.php');
                     </div>
                 </div>
                 <div class="form_rows">
-                    <label for="expDate" class="form_label">Expiration Date:</label>
+                    <label for="expireMM" class="form_label">Expiration Date:</label>
                     <div class="form_cell">
                         <!-- <input type="text" name="expDate" id="cardNum" expDate /> -->
                         <select name='expireMM' id='expireMM'>

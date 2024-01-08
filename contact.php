@@ -7,6 +7,7 @@
  * @created 3/29/2023
  */
 
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/dwr/includes/general_functions.php');
 require_once $_SERVER['DOCUMENT_ROOT'] .'/dwr/includes/recaptcha/src/autoload.php';
 $siteKeyv3 = '6LcfAeokAAAAAGJ9cS_B2Q0Bc2V5Snjt_Mqu54ou'; // v3
 $secretv3 = '6LcfAeokAAAAAPGRs4433arw66iKFEr1b8WPSTW9';
@@ -35,7 +36,9 @@ if (isset($_POST['g-recaptcha-response'])) {
             $headers = "MIME-Version: 1.0" . "\r\n";
             $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
             if (mail($sendTo, $subject, $body, $headers)) {
-                $msg = 'Thank you for sending your message to Desert Willow Ranch.';
+                $msg = 'Thank you for sending your message to ' . COMPANY_NAME . '.';
+            } else {
+                $msg = 'There was a problem sending your message.';
             }
         } else {
             $msg = 'Please fill out all fields.';
@@ -57,32 +60,33 @@ require_once('./page_nav.php');
         <h2>Contact Us</h2>
     </div>
     <address id="contact_page">
-        Desert Willow Ranch B&B, LLC<br>
-        381 S. Pinto Place<br>
-        Tucson, Arizona, 85748<br>
-        (520) 296-4500
+        <?= COMPANY_NAME ?>, LLC<br>
+        <?= COMPANY_ADDRESS ?><br>
+        Phone: <?= COMPANY_PHONE ?><br>
+        Email: <?= COMPANY_EMAIL ?>
     </address>
-    <?php if ($msg == '') { ?>
+    <div class="form_error" style="margin: 2rem auto; font-size: 14px;"><?= $msg ?></div>
+    <?php if ($msg !== 'Thank you for sending your message to ' . COMPANY_NAME . '.') { ?>
         <p>To ask a question, please enter your information and question below.</p>
         <form action="<?=$_SERVER['PHP_SELF']?>" id="contactForm" method="post" accept-charset="UTF-8">
             <div class="form_rows">
                 <label for="name" class="form_label">Name</label>
                 <div class="form_cell">
-                    <input type="text" name="name" id="name" required />
+                    <input type="text" name="name" id="name" required value="<?= gls_esc_attr($_POST['name'])?>" />
                     <span class="form_error">*</span>
                 </div>
             </div>
             <div class="form_rows">
                 <label for="email" class="form_label">Email</label>
                 <div class="form_cell">
-                    <input type="email" name="email" id="email" required />
+                    <input type="email" name="email" id="email" value="<?= gls_esc_attr($_POST['email'])?>" required />
                     <span class="form_error">*</span>
                 </div>
             </div>
             <div class="form_rows">
                 <label for="question" class="form_label" style="align-self: flex-start;">Question</label>
                 <div class="form_cell">
-                    <textarea name="question" id="question" style="width: 90%; max-width: 600px; height: 200px;" required></textarea>
+                    <textarea name="question" id="question" style="width: 90%; max-width: 600px; height: 200px;" required><?= gls_esc_html($_POST['question'])?></textarea>
                     <span class="form_error">*</span>
                 </div>
             </div>
@@ -104,10 +108,7 @@ require_once('./page_nav.php');
             <span class="form_error">* = Required</span>
 
         </form>
-    <?php } else {
-        echo '<div class="form_error" style="margin: 2rem auto; font-size: 14px;">' . $msg . '</div>';
-    } ?>
-
+    <?php } ?>
 </main>
 
 <?php

@@ -642,8 +642,8 @@ function showExportOptions(bool $formBased = true, int $totPages = 1, $scaleFact
                         Export
                     </button>&nbsp;&nbsp;
                 <?php } ?>
-                <button type="button" class="buttonBar bad_color" id="cancelExportBtn" >
-                    <i class="bi-x-octagon"></i>&nbsp;
+                <button type="button" class="buttonBar" id="cancelExportBtn" >
+                    <i class="bi-arrow-return-left"></i>&nbsp;
                     Cancel
                 </button>
             </div>

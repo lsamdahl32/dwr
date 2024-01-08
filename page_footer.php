@@ -7,7 +7,7 @@
  *
  */
 ?>
-            <footer>&copy; 2023, Desert Willow Ranch B&B. Powered by PLManager, &copy; <?=date('Y')?>, Gleesoft.com</footer>
+            <footer>&copy; 2023, <?= COMPANY_NAME ?>. Powered by PLManager, &copy; <?=date('Y')?>, Gleesoft.com</footer>
         </div>
     </body>
 </html>

@@ -130,15 +130,15 @@ class Tabbar2
         <script>
 
             var tabbar<?=$this->identifier?> = new tabbar('<?=$this->identifier?>', {
-                identifier:     "<?=gls_esc_js($this->identifier)?>",
-                currentTab:     <?=gls_esc_js($this->currentTab)?>,
-                currentTabID:   "<?=gls_esc_js($this->getCurrentTab())?>",
-                tabBodyId:      "<?=gls_esc_js(($this->tabBodyId == 'tab_body')?$this->tabBodyId . $this->identifier:$this->tabBodyId) ?>",
+                identifier:     <?=gls_esc_js($this->identifier)?>,
+                currentTab:     <?= $this->currentTab ?>,
+                currentTabID:   <?=gls_esc_js($this->getCurrentTab())?>,
+                tabBodyId:      <?=gls_esc_js(($this->tabBodyId == 'tab_body')?$this->tabBodyId . $this->identifier:$this->tabBodyId) ?>,
                 useAjax:        <?=($this->useAjax)? 'true' : 'false'?>,
-                ajaxHandler:    "<?=gls_esc_js($this->ajaxHandler)?>",
-                refreshCallback:"<?=gls_esc_js($this->refreshCallback)?>",
-                linkField:      "<?=gls_esc_js($_POST['linkField'])?>",
-                linkID:         "<?=gls_esc_js($_POST['linkID'])?>",
+                ajaxHandler:    <?=gls_esc_js($this->ajaxHandler)?>,
+                refreshCallback:<?=gls_esc_js($this->refreshCallback)?>,
+                linkField:      <?=gls_esc_js($_POST['linkField'])?>,
+                linkID:         <?=gls_esc_js($_POST['linkID'])?>,
                 disabled:       false,
                 post:           <?=json_encode($_POST) // this could be a security risk if used on a public site ?>
             });

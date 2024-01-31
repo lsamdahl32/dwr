@@ -124,6 +124,7 @@ function gls_esc_url( $url)
  *
  * Text passed to esc_js() is stripped of invalid or special characters,
  * and properly slashed for output.
+ * Changed to json_encode (from AI - 1/31/24)
  *
  * @param string $text      The text prior to being escaped.
  * @return string
@@ -131,10 +132,11 @@ function gls_esc_url( $url)
 function gls_esc_js( $text )
 {
     $safe_text = gls_check_invalid_utf8( $text, true );
-    $safe_text = htmlspecialchars( $safe_text, ENT_COMPAT );
-    $safe_text = preg_replace( '/&#(x)?0*(?(1)27|39);?/i', "'", stripslashes( $safe_text ) );
-    $safe_text = str_replace( "\r", '', $safe_text );
-    $safe_text = str_replace( "\n", '\\n', addslashes( $safe_text ) );
+    // $safe_text = htmlspecialchars( $safe_text, ENT_COMPAT );
+    // $safe_text = preg_replace( '/&#(x)?0*(?(1)27|39);?/i', "'", stripslashes( $safe_text ) );
+    // $safe_text = str_replace( "\r", '', $safe_text );
+    // $safe_text = str_replace( "\n", '\\n', addslashes( $safe_text ) );
+    $safe_text = json_encode($safe_text, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); // note: this will add quotes!
     return $safe_text;
 }
 
@@ -152,7 +154,7 @@ function gls_esc_js( $text )
  */
 function gls_esc_attr( $text ) {
     $safe_text = gls_check_invalid_utf8( $text, true );
-    $safe_text = htmlspecialchars( $safe_text, ENT_QUOTES );
+    $safe_text = htmlspecialchars( $safe_text, ENT_QUOTES, 'UTF-8', false);
     return $safe_text;
 }
 

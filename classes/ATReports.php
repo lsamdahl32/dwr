@@ -396,7 +396,7 @@ class ATReports
 
                         $column = 1;
                         $lookupComment = '';
-                        $column_array = sortArray($this->column_array, 'origOrder'); // use unsorted array for search criteria
+                        $column_array = sortArray($this->column_array, ['origOrder']); // use unsorted array for search criteria
                         $dbe = new DBEngine($this->db);
                         for ($i = 0; $i < count($column_array); $i++) {
                             $col = $column_array[$i];
@@ -572,7 +572,7 @@ class ATReports
                 </div>
                 <?php
                 // resort the array by 'order'
-                $column_array = sortArray($column_array, 'order');
+                $column_array = sortArray($column_array, ['order']);
                 ?>
                 <div id="dragColumnNames">
                     <?php
@@ -1493,7 +1493,7 @@ class ATReports
         }
         // resort the array by 'order'
 //        echo '<pre>'; print_r($this->column_array); echo '</pre>';exit;
-        $this->column_array = sortArray($this->column_array, 'order');
+        $this->column_array = sortArray($this->column_array, ['order']);
         if (isset($_POST['exporttype']) and $_POST['exporttype'] == 'pdf') {
             exportToPDF($this->reportTitle, $subtitle, $this->column_array, $this->rt->getOutput(), $scaleFactor, $sendTo, '', '', !$currPage);
         } else {
@@ -1541,7 +1541,7 @@ class ATReports
     private function setColumnArray(array $column_array)
     {
         $this->column_array = $column_array;
-//        $this->getUserPreferences();
+        $this->getUserPreferences();
     }
 
     /**
@@ -1557,35 +1557,35 @@ class ATReports
             }
         }
         // get user preferences
-        // $valueArray = getPreferences(pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME));
-        // if (isset($_POST['btnRestoreDefaults'])) {
-        //     erasePreferences(pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME));
-        //     $this->rt->setFlushColWidths(true);
-        //     // also need to clear all POST vars
-        //     unset($_POST);
-        // } else {
-        //     if ($valueArray) {
-        //         $column_array = $this->column_array;
-        //         $orderBy = $this->rt->getQryOrderBy();
-        //         $showAsListing = $this->showAsListing;
-        //         extract($valueArray);
-        //         $this->column_array = mergeColumnArray($this->column_array, $column_array);
-        //         $this->rt->setQryOrderBy($orderBy[0], $orderBy[1], $orderBy[2]);
-        //         $this->showAsListing = $showAsListing;
-        //         // send the prefs to reportTable class
-        //         for ($i = 0; $i < count($this->column_array); $i++) {
-        //             // set the order
-        //             $field = removePeriodsInFieldName($this->column_array[$i]['field']);
-        //             $this->rt->setColumnOrder($i, (int)$this->column_array[$i]['order']);
-        //             $this->rt->setColumnWidth($i, $this->column_array[$i]['width']);
-        //             if ($this->column_array[$i]['show']) {
-        //                 $this->rt->hideShowColumn($i, true);
-        //             } else {
-        //                 $this->rt->hideShowColumn($i, false);
-        //             }
-        //         }
-        //     }
-        // }
+        $valueArray = getPreferences(pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME));
+        if (isset($_POST['btnRestoreDefaults'])) {
+            erasePreferences(pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME));
+            $this->rt->setFlushColWidths(true);
+            // also need to clear all POST vars
+            unset($_POST);
+        } else {
+            if ($valueArray) {
+                $column_array = $this->column_array;
+                $orderBy = $this->rt->getQryOrderBy();
+                $showAsListing = $this->showAsListing;
+                extract($valueArray);
+                $this->column_array = mergeColumnArray($this->column_array, $column_array);
+                $this->rt->setQryOrderBy($orderBy[0], $orderBy[1], $orderBy[2]);
+                $this->showAsListing = $showAsListing;
+                // send the prefs to reportTable class
+                for ($i = 0; $i < count($this->column_array); $i++) {
+                    // set the order
+                    $field = removePeriodsInFieldName($this->column_array[$i]['field']);
+                    $this->rt->setColumnOrder($i, (int)$this->column_array[$i]['order']);
+                    $this->rt->setColumnWidth($i, $this->column_array[$i]['width']);
+                    if ($this->column_array[$i]['show']) {
+                        $this->rt->hideShowColumn($i, true);
+                    } else {
+                        $this->rt->hideShowColumn($i, false);
+                    }
+                }
+            }
+        }
         $this->prefChange = false;
     }
 
@@ -1595,7 +1595,7 @@ class ATReports
      */
     public function checkColWidthAndSort()
     {
-        $this->column_array = sortArray($this->column_array, 'order');
+        $this->column_array = sortArray($this->column_array, ['order']);
         $oldOrderBy = $this->rt->getQryOrderBy();
         $orderBy = $oldOrderBy;
         // column sorting routines
@@ -1682,7 +1682,7 @@ class ATReports
         if ($this->prefChange) {
             $column_array = $this->column_array;
             $showAsListing = $this->showAsListing;
-//            savePreferences(pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME), compact('column_array', 'orderBy', 'showAsListing'));
+            savePreferences(pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME), compact('column_array', 'orderBy', 'showAsListing'));
             $this->prefChange = false;
             $this->rt->setFlushColWidths(true);
             //    echo 'PREF CHANGE! ';

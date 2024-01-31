@@ -270,132 +270,170 @@ function send_email ($recipients, $subject="", $messageBody="", $from=null, $cc=
 }
 
 /**
- * sortArray
- * sorts a multidimensional array, i.e. a database type array in [row] [columns]
- *
- * @param array $arr = the array
- * @param string $sortKey = the sub element to sort by
- * @param bool $reverse
- * @param bool $isObject
- * @return array $result
+ * New array sorting routine
+ * Will sort an array of arrays (database) or an array of objects
+ * 
+ * @param array $array - the input array
+ * @param array $keys - the keys (fields) to sort by
+ * @param array $orders - an array of sort orders corresponding to $keys - use SORT_ASC or SORT_DESC
+ * @return array - if sort fails, original array is returned
  */
-function sortArray(array $arr, string $sortKey, bool $reverse = false, bool $isObject = false):array
-{
-    if ($isObject) {
-        if (isset($arr[0]->$sortKey)) { // must have the required sub-element
-            $n = sizeof($arr);
-            for ($i = 1; $i < $n; $i++) {
-                $flag = false;
-                for ($j = $n - 1; $j >= $i; $j--) {
-                    if ($reverse) {
-                        if ($arr[$j - 1]->$sortKey <= $arr[$j]->$sortKey) {
-                            //                    echo $arr[$j - 1][$sortKey].' > '. $arr[$j][$sortKey].'<br>';
-                            $tmp = $arr[$j - 1];
-                            $arr[$j - 1] = $arr[$j];
-                            $arr[$j] = $tmp;
-                            $flag = true;
-                        }
-                    } else {
-                        if ($arr[$j - 1]->$sortKey > $arr[$j]->$sortKey) {
-                            //                    echo $arr[$j - 1][$sortKey].' > '. $arr[$j][$sortKey].'<br>';
-                            $tmp = $arr[$j - 1];
-                            $arr[$j - 1] = $arr[$j];
-                            $arr[$j] = $tmp;
-                            $flag = true;
-                        }
-                    }
-                }
-                if (!$flag) {
-                    break;
-                }
-            }
-        }
-    } else {
-        if (isset($arr[0][$sortKey])) { // must have the required sub-element
-            $n = sizeof($arr);
-            for ($i = 1; $i < $n; $i++) {
-                $flag = false;
-                for ($j = $n - 1; $j >= $i; $j--) {
-                    if ($reverse) {
-                        if ($arr[$j - 1][$sortKey] <= $arr[$j][$sortKey]) {
-                            //                    echo $arr[$j - 1][$sortKey].' > '. $arr[$j][$sortKey].'<br>';
-                            $tmp = $arr[$j - 1];
-                            $arr[$j - 1] = $arr[$j];
-                            $arr[$j] = $tmp;
-                            $flag = true;
-                        }
-                    } else {
-                        if ($arr[$j - 1][$sortKey] > $arr[$j][$sortKey]) {
-                            //                    echo $arr[$j - 1][$sortKey].' > '. $arr[$j][$sortKey].'<br>';
-                            $tmp = $arr[$j - 1];
-                            $arr[$j - 1] = $arr[$j];
-                            $arr[$j] = $tmp;
-                            $flag = true;
-                        }
-                    }
-                }
-                if (!$flag) {
-                    break;
-                }
-            }
-        }
-    }
-    return $arr;
-}
+function sortArray(array $array, array $keys, ?array $orders = [null]) {
+    $arr = $array; // make a copy of the array before sorting
+    uasort($arr, function ($a, $b) use ($keys, $orders) { // sort with a callback
+        foreach ($keys as $index => $key) {
+            $order = $orders[$index] ?? SORT_ASC;
 
-/**
- * An alternative to the above function, this function will sort a multidimensional array by multiple keys
- * params are:
- * array input array
- * string sort field
- * const SORT_ASC or SORT_DESC
- * -- repeat the last two parameters as needed for sub sort levels
- * @return mixed
- */
-function array_orderby()
-{
-    $args = func_get_args();
-    $data = array_shift($args);
-    foreach ($args as $n => $field) {
-        if (is_string($field)) {
-            $tmp = array();
-            foreach ($data as $key => $row)
-                $tmp[$key] = $row[$field];
-            $args[$n] = $tmp;
+            if (is_object($a)) { // if this is an array of objects
+                if ($a->$key != $b->$key) {
+                    return ($order == SORT_ASC)
+                        ? strnatcmp($a->$key, $b->$key)
+                        : strnatcmp($b->$key, $a->$key);
+                }
+
+            } else { // if this is a standard array of arrays
+                if ($a[$key] != $b[$key]) {
+                    return ($order == SORT_ASC)
+                        ? strnatcmp($a[$key], $b[$key])
+                        : strnatcmp($b[$key], $a[$key]);
+                }
+            }
         }
-    }
-    $args[] = &$data;
-    call_user_func_array('array_multisort', $args);
-    return array_pop($args);
+        return 0;
+    });
+    return $arr;
 }
 
 /**
  * niceDate
  *
- * @param string|null $dat - the date to be formatted
- * @param bool $incTime - include the time portion
- * @param string|null $fmat - optional - date format string
+ * @param string|null $date - the date to be formatted
+ * @param bool $includeTime - include the time portion
+ * @param string|null $format - optional - date format string
  * @return string
  */
-function niceDate(?string $dat, bool $incTime = true, ?string $fmat = ''):string
+function niceDate(?string $date, bool $includeTime = true, ?string $format = null):string
 {
-    if (is_null($dat) or ($dat == '') or (date('Y-m-d H:i:s',strtotime($dat)) == '1969-12-31 00:00:00') or ($dat == '0000-00-00 00:00:00') or ($dat == '0000-00-00')){
+    // Early exit if date validation fails
+    if (is_null($date) 
+        or ($date == '') 
+        or (date('Y-m-d H:i:s',strtotime($date)) == '1969-12-31 00:00:00') 
+        or ($date == '0000-00-00 00:00:00') 
+        or ($date == '0000-00-00')){
         return '';
-    } else {
-        if ($fmat == '') {
-            if ($incTime) {
-                return date('m/d/Y H:i', strtotime($dat));
-            } else {
-                return date('m/d/Y', strtotime($dat));
-            }
-        } else {
-            if ($incTime) {
-                return date($fmat, strtotime($dat));
-            } else {
-                return date($fmat, strtotime($dat));
-            }
-        }
     }
+
+    $timestamp = strtotime($date);
+
+    // Handle invalid dates
+    if ($timestamp === false) {
+        return '';
+    }
+
+    // Default format selection
+    if (!$format) {
+        $format = $includeTime ? 'm/d/Y H:i' : 'm/d/Y'; 
+    }
+
+    return date($format, $timestamp);
+}
+
+/**
+ * savePreferences
+ * 3/12/21 added ability to set userID. For global settings, set it to my ID - 28
+ *
+ * @param string $sourceFile
+ * @param array $valueArray
+ * @param int|null $userID
+ */
+function savePreferences(string $sourceFile, array $valueArray, ?int $userID = 0)
+{
+    $dbe = new DBEngine('plm');
+    if ($userID == 0) $userID = $_SESSION['userID'];
+    // find existing pref record for this userID/sourceFile
+    $pq_query = 'SELECT * FROM `preferences` WHERE `sourceFile` = ? AND `userID` = ? ';
+    $dbe->setBindtypes("si");
+    $dbe->setBindvalues(array($sourceFile, $userID));
+    $rows = $dbe->execute_query($pq_query);
+    if (count($rows) > 0) {
+        // replace record with new $valueArray
+        $data = array(
+            'valueArray'    => serialize($valueArray),
+        );
+        $dbe->updateRow('preferences', $data, 'preferenceID', $rows[0]['preferenceID'], 's'); // no logging needed 10/21/2020
+    } else {
+        // insert new record
+        $data = array(
+            'sourceFile'    => $sourceFile,
+            'userID'        => $userID,
+            'valueArray'    => serialize($valueArray),
+        );
+        $dbe->insertRow('preferences', $data);
+    }
+
+    $dbe->close();
+}
+
+/**
+ * getPreferences
+ * 3/12/21 added ability to set userID. For global settings, set it to my ID - 28
+ *
+ * @param string $sourceFile
+ * @param int|null $userID
+ * @return false|mixed
+ */
+function getPreferences(string $sourceFile, ?int $userID = 0)
+{
+    $dbe = new DBEngine('plm');
+    if ($userID == 0) $userID = $_SESSION['userID'];
+    // find existing pref record for this userID/sourceFile
+    $pq_query = 'SELECT * FROM `preferences` WHERE `sourceFile` = ? AND `userID` = ? ';
+    $dbe->setBindtypes("si");
+    $dbe->setBindvalues(array($sourceFile, $userID));
+    $rows = $dbe->execute_query($pq_query);  // execute query
+    $dbe->close();
+    if (count($rows) > 0) {
+        return unserialize($rows[0]['valueArray']);
+    } else {
+        return false;
+    }
+}
+
+/**
+ * erasePreferences
+ *
+ * @param string $sourceFile
+ */
+function erasePreferences(string $sourceFile)
+{
+    $dbe = new DBEngine('plm');
+    // find existing pref record for this userID/sourceFile
+    $pq_query = 'DELETE FROM `preferences` WHERE `sourceFile` = ? AND `userID` = ? ';
+    $dbe->setBindtypes("si");
+    $dbe->setBindvalues(array($sourceFile, $_SESSION['userID']));
+    $result = $dbe->execute_query($pq_query);  // execute query
+    $dbe->close();
+}
+
+/**
+ * mergeColumnArray - part of the Preferences system
+ * This function will merge the user-changeable elements of the column array with the default values from the parent file.
+ *
+ * @param array $column_array
+ * @param array $column_array_items
+ * @return array
+ */
+function mergeColumnArray(array $column_array, array $col2):array
+{
+    for ($i=0; $i < count($column_array); $i++) { // loop the default array
+//        if ($column_array[$i]['field'] == $col2[$i]['field'] and $column_array[$i]['heading'] == $col2[$i]['heading']) { // if found, replace the values
+            $column_array[$i]['width'] = $col2[$i]['width'];
+            $column_array[$i]['search'] = $col2[$i]['search'];
+            $column_array[$i]['show'] = $col2[$i]['show'];
+            $column_array[$i]['order'] = $col2[$i]['order'];
+//        }
+    }
+    return $column_array;
 }
 
 /**
@@ -506,23 +544,22 @@ function colLookup(string $db, string $sql, $id, bool $editable = false, bool $a
  */
 function formatSizeUnits($bytes, ?int $decimals = 1):string
 {
-    if ($bytes >= 1099511627776) {
-        $bytes = number_format($bytes / 1099511627776, $decimals) . ' TB';
-    } elseif ($bytes >= 1073741824) {
-        $bytes = number_format($bytes / 1073741824, $decimals) . ' GB';
-    } elseif ($bytes >= 1048576) {
-        $bytes = number_format($bytes / 1048576, $decimals) . ' MB';
-    } elseif ($bytes >= 1024) {
-        $bytes = number_format($bytes / 1024, $decimals) . ' KB';
-    } elseif ($bytes > 1) {
-        $bytes = $bytes . ' bytes';
-    } elseif ($bytes == 1) {
-        $bytes = $bytes . ' byte';
+    $units = ['bytes', 'KB', 'MB', 'GB', 'TB'];
+    $factor = floor((strlen($bytes) - 1) / 3);
+
+    if ($factor > 0) { 
+        $size = $bytes / pow(1024, $factor);
     } else {
-        $bytes = '0 bytes';
+        if ($bytes > 1) {
+            $size = $bytes;
+        } elseif ($bytes == 1) {
+            return $bytes . ' byte';
+        } else {
+            $size = 0;
+        }
     }
 
-    return $bytes;
+    return round($size, $decimals) . ' ' . $units[$factor];
 }
 
 /**

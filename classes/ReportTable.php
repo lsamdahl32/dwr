@@ -194,7 +194,7 @@ class ReportTable
         if (!isset($currencySymbol)) $currencySymbol = CURRENCY_SYMBOL;
 
         // resort the array by 'order'
-        $cols = sortArray($this->columns, 'order', false, true);
+        $cols = sortArray($this->columns, ['order']);
         $totWidth = 0;
         // set total width of the table by adding up the columns - 9/23/2019
         foreach ($cols as $col) {
@@ -378,7 +378,9 @@ class ReportTable
         }
         if (!isset($currencySymbol)) $currencySymbol = CURRENCY_SYMBOL;
         // resort the array by 'order'
-        $cols =  sortArray($this->columns, 'order', false, true);
+        // $cols =  sortArray($this->columns, 'order', false, true);
+        $cols = sortArray($this->columns, ['order']);
+
         $subtots = array();
         $grandTots = array();
         $oldid = '';
@@ -743,7 +745,7 @@ class ReportTable
     {
         if (count($this->output) == 0) $this->processTable();
 
-        $cols = sortArray($this->columns, 'order', false, true);
+        $cols = sortArray($this->columns, ['order']);
         $oldGroup = '';
         $extraPadding = '';
         $countRows = 0;

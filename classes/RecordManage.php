@@ -542,14 +542,9 @@ class RecordManage
                 </div>
             </div>
             <?php
-            // resort the array by 'order'
-            // $column_array = sortArray($column_array, 'order');
-            $column_array = array_orderby($column_array, 'order', SORT_ASC);
-            // resort the array by 'profile'
-            // $column_array = sortArray($column_array, 'profileOrder');
-            $column_array = array_orderby($column_array, 'profileOrder', SORT_ASC);
-
-                ?>
+            // resort the array by 'profile' and 'order'
+            $column_array = sortArray($column_array, ['profileOrder', 'order'], [SORT_ASC, SORT_ASC]);
+            ?>
             <div id="hideProfile<?=$this->identifier?>">
                 <?php if ($this->addComment != '') echo '<p id="addComment'.$this->identifier.'" style="display: none;">' . $this->addComment . '</p>';?>
                 <div id="saveMessage<?=$this->identifier?>" class="errorMsg" style="display: none; margin-bottom: 1em;"></div>

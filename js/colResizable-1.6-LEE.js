@@ -90,7 +90,8 @@
 	
         var th = t.find(">thead>tr:first>th,>thead>tr:first>td"); //table headers are obtained
 		if(!th.length) th = t.find(">tbody>tr:first>th,>tr:first>th,>tbody>tr:first>td, >tr:first>td");	 //but headers can also be included in different ways
-		th = th.filter(":visible");					//filter invisible columns
+		// th = th.filter(":visible");				//filter invisible columns - disable by Lee to allow background loading of tables where not visible
+													// this may mean that some hidden columns have grips assigned 1/31/24
 		t.cg = t.find("col"); 						//a table can also contain a colgroup with col elements		
 		t.ln = th.length;							//table length is stored	
 		if(t.p && S && S[t.id])memento(t,th);		//if 'postbackSafe' is enabled and there is data for the current table, its coloumn layout is restored

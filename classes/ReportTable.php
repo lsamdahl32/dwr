@@ -856,7 +856,7 @@ class ReportTable
     {
         // note: these functions are name-spaced as app{identifier} so all variables are local
         // only allow column resizing if not showing as list
-        if (!$this->noColResize and !$this->showAsList) echo '<script src="'.PLMSite.'js/colResizable-1.6-LEE.js"></script>';
+        if (!$this->noColResize and !$this->showAsList) echo '<script src="'.PLMSite.'js/colResizable-1.6-LEE.min.js"></script>';
         ?>
 
         <script>

@@ -202,7 +202,7 @@ function gls_encrypt( $plain ) {
 
     $output = false;
     $encrypt_method = "AES-256-CBC";
-    $secret_key = ' #Harm0ny,&&,m3lodY';
+    $secret_key = getenv('SECRET_KEY');
     // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
     $iv = openssl_random_pseudo_bytes(16);
     // hash the secret key
@@ -219,7 +219,7 @@ function gls_decrypt( $encrypted ) {
 
     $output = false;
     $encrypt_method = "AES-256-CBC";
-    $secret_key = ' #Harm0ny,&&,m3lodY';
+    $secret_key = getenv('SECRET_KEY');
     // extract iv from encrypted input
     $iv = substr($encrypted, 0, 16);
     $encrypted = substr($encrypted, 16);
@@ -538,7 +538,6 @@ function colLookup(string $db, string $sql, $id, bool $editable = false, bool $a
 
 /**
  * formatSizeUnits
- * Snippet from PHP Share: http://www.phpshare.org
  *
  * @param $bytes
  * @param int|null $decimals
@@ -712,7 +711,10 @@ function isValidEmail(string $email):bool
     // this method will most likely break in that case
     list( $user, $domain ) = explode( "@", $email );
     $valid_ip_form = '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}';
-    $valid_email_pattern = '^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$';
+    // strict, but limits TLD to 2 to 4 chars
+    // $valid_email_pattern = '^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$';
+    // moderately flexible
+    $valid_email_pattern = '^(([^<>()[]\.,;:\s@"]+(.[^<>()[]\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$';
     $space_check = '[ ]';
 
     // strip beginning and ending quotes, if and only if both present

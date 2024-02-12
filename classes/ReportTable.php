@@ -100,86 +100,81 @@ class ReportTable
     public function processQuery(bool $debug = false)
     {
         if ($this->qryFunction != '' and is_callable($this->qryFunction)) {
+            // querying is handled by the callback function
             $rows = call_user_func($this->qryFunction, $this->limit, $this->offset, $this->qryWhere, $this->qryOrderBy);
             if ($rows) {
                 $this->rows = $rows;
             }
-        } else {
-            // query the database
-            $dbe = new DBEngine($this->db, $debug);
-            if (count($this->qryWhere) > 1 and $this->qryWhere[0] == '1') array_shift($this->qryWhere); // remove the default first element of the where clause
-            $pq_query = $this->qrySelect . ' WHERE ' . implode(' AND ', $this->qryWhere);
-            if ($this->qryGroupBy != '') {
-                $pq_query .= ' GROUP BY ' . $this->qryGroupBy;
-            }
-            $pq_query .= ' ORDER BY ' . implode(',', $this->qryOrderBy);
-            if ($this->limit > 0) { // limit 0 or -1 means no limit, all records returned
-                $pq_query .= ' LIMIT ' . $this->offset . ',' . $this->limit;
-            }
-            $dbe->setBindtypes($this->pq_bindtypes);
-            $dbe->setBindvalues($this->pq_bindvalues);
-            $this->rows = $dbe->execute_query($pq_query);  // execute query
-            if ($this->limit < 1 and $this->rows) { // limit 0 or -1 means no limit, all records returned
-                $this->countRows = count($this->rows);
-            }
-
-            $dbe->close();
+            return;
         }
+
+        // query the database
+        $dbEngine = new DBEngine($this->db, $debug);
+        if (count($this->qryWhere) > 1 and $this->qryWhere[0] == '1') array_shift($this->qryWhere); // remove the default first element of the where clause
+        $pq_query = $this->qrySelect . ' WHERE ' . implode(' AND ', $this->qryWhere);
+        if ($this->qryGroupBy != '') $pq_query .= ' GROUP BY ' . $this->qryGroupBy;
+        $pq_query .= ' ORDER BY ' . implode(',', $this->qryOrderBy);
+        if ($this->limit > 0) { // limit 0 or -1 means no limit, all records returned
+            $pq_query .= ' LIMIT ' . $this->limit . ' OFFSET ' . $this->offset;
+        }
+        $dbEngine->setBindtypes($this->pq_bindtypes);
+        $dbEngine->setBindvalues($this->pq_bindvalues);
+        $this->rows = $dbEngine->execute_query($pq_query);  // execute query
+        if ($this->limit < 1 and $this->rows) { // limit 0 or -1 means no limit, all records returned
+            $this->countRows = count($this->rows);
+        }
+
+        $dbEngine->close();
     }
 
     /**
      * processPagination
+     * Calculate Pagination Metadata
+     * Rewritten by chatbot 2/12/24
      *
      * @param bool $debug
      */
     public function processPagination(bool $debug = false)
     {
-        if ($this->qryFunction != '' and is_callable($this->qryFunction)) {
-            // Pagination must be handled in the callback function.
-            $junk = call_user_func($this->qryFunction, $this->limit, $this->offset, $this->qryWhere, $this->qryOrderBy);
-        } else {
-            // get total count of filtered records for pagination
-            $dbe = new DBEngine($this->db, $debug);
-            $pq_query = 'SELECT count(*) AS cnt FROM ' . $this->table . ' WHERE ' . implode(' AND ', $this->qryWhere);
-            if ($this->qryGroupBy != '') {
-                $pq_query .= ' GROUP BY ' . $this->qryGroupBy;
-            }
-            $dbe->setBindtypes($this->pq_bindtypes);
-            $dbe->setBindvalues($this->pq_bindvalues);
-            $allrows = $dbe->execute_query($pq_query);  // execute query
-            $dbe->close();
-            if ($this->qryGroupBy != '') {
-                $count_rows = count($allrows);
-            } else {
-                $count_rows = $allrows[0]['cnt'];
-            }
-            $this->countRows = (int) $count_rows;
+        if ($this->qryFunction !== '' && is_callable($this->qryFunction)) {
+            // Pagination is handled by the callback function
+            call_user_func($this->qryFunction, $this->limit, $this->offset, $this->qryWhere, $this->qryOrderBy);
+            return;
+        }
+        
+        // Calculate total count of filtered records
+        $dbEngine = new DBEngine($this->db, $debug);
+        $query = 'SELECT COUNT(*) AS cnt FROM ' . $this->table . ' WHERE ' . implode(' AND ', $this->qryWhere);
+        if ($this->qryGroupBy !== '') $query .= ' GROUP BY ' . $this->qryGroupBy;
+        $dbEngine->setBindTypes($this->pq_bindtypes);
+        $dbEngine->setBindValues($this->pq_bindvalues);
+        $result = $dbEngine->execute_query($query);
+        $dbEngine->close();
 
-            $this->totPages = 1;
-            if ($this->limit == -1) { // all records
-                $this->limit = $this->countRows;
-            }
-            if ($this->countRows > 0 and $this->limit > 0) { // avoid division by zero error
-                if ($this->countRows / $this->limit < 1) {
-                    $this->totPages = 1;
-                } elseif (($this->countRows % $this->limit) != 0) { // modulus
-                    $this->totPages = round(($this->countRows / $this->limit) + .5);
-                } else {
-                    $this->totPages = round($this->countRows / $this->limit);
-                }
-            } else {
-                $this->totPages = 1;
-            }
-            if ($this->totPages > 1) {
-                $this->page = round(($this->offset / $this->limit) + 1);
-            } else {
-                $this->page = 1;
-                $this->offset = 0;
-            }
-            if ($this->page > $this->totPages) {
-                $this->offset = 0;
-                $this->page = 1;
-            }
+        if ($this->qryGroupBy !== '') {
+            $countRows = count($result);
+        } else {
+            $countRows = $result[0]['cnt'];
+        }
+        $this->countRows = (int) $countRows;
+
+        // Calculate total pages
+        $this->totPages = 1;
+        if ($this->limit === -1) {
+            $this->limit = $this->countRows;
+        }
+        if ($this->countRows > 0 && $this->limit > 0) {
+            $this->totPages = ceil($this->countRows / $this->limit);
+        }
+
+        // Calculate current page and offset
+        $this->page = (int) round(($this->offset / $this->limit) + 1);
+        if ($this->totPages === 1) {
+            $this->page = 1;
+            $this->offset = 0;
+        } elseif ($this->page > $this->totPages) {
+            $this->offset = 0;
+            $this->page = 1;
         }
     }
 
@@ -522,7 +517,7 @@ class ReportTable
                                     if ($col->attributes['type'] == 'lookup') {
                                         $temp = '';
                                         if (isset($col->attributes['format']['linkField'])) {
-                                            $temp = lookup($col->attributes['format']['db'], $col->attributes['format']['table'], $col->attributes['format']['keyfield'], $row[$col->attributes['format']['linkField']], $lfField);
+                                            // $temp = lookup($col->attributes['format']['db'], $col->attributes['format']['table'], $col->attributes['format']['keyfield'], $row[$col->attributes['format']['linkField']], $lfField);
                                         } else {
 //                                            $temp = lookup($col->attributes['format']['db'], $col->attributes['format']['table'], $col->attributes['format']['keyfield'], $row[$fld], $lfField);
                                             $temp = lookup($col->attributes['format'], $row[$fld]);

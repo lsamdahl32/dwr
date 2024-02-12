@@ -194,9 +194,9 @@ class RecordManage
                     // else update existing record
                     if (($this->useLocking and $this->locking->isLockedByMe($this->currentID)) or !$this->useLocking) {
                         if (!is_callable($this->loggingCallback)) { // call logging class before save to get the old data
-                            if ($this->atLog) {
+                            // if ($this->atLog) {
 //                                $this->atLog->prepareUpdateLog($this->db, $this->table, '', $this->keyField, $this->currentID, serialize($this->dbVars), 'Record updated by RecordManage class.');
-                            }
+                            // }
                         }
                         $result2 = 0;
                         $result = $this->dbe->updateRow($this->table, $this->dbVars, $this->keyField, $this->currentID, $this->keyFieldType);
@@ -217,9 +217,9 @@ class RecordManage
                             }
                         } else {
                             $errormsg = 'No changes were saved. ' . $this->dbe->error_msg;
-                            if ($this->atLog) { // clear the data in the logging class
+                            // if ($this->atLog) { // clear the data in the logging class
 //                                $this->atLog->cancelCommit();
-                            }
+                            // }
                         }
                     } else {
                         $errormsg = 'The record lock failed. No changes were saved.';
@@ -305,9 +305,9 @@ class RecordManage
                 }
                 if ($deleteOK) {
                     if (!is_callable($this->loggingCallback)) { // call logging class before delete to get the old data
-                        if ($this->atLog) {
+                        // if ($this->atLog) {
 //                            $this->atLog->prepareDeleteLog($this->db, $this->table, $this->keyField, $this->currentID, 'Record deleted by RecordManage class.');
-                        }
+                        // }
                     }
                     $result = $this->dbe->deleteRow($this->table, $this->keyField, $this->currentID, 'i');
                     if ($result == 0) {
@@ -1045,7 +1045,7 @@ class RecordManage
                         $this->hasTinymce = true;
                         $this->tinymceSettings = $col['tinymce'];
                         // allow custom content_css to exist in each record, will replace any set in column array, must contain an absolute path to file. (for EMS - 2/26/21)
-                        if (isset($row['content_css']) and !is_null($row['content_css']) and file_exists($row['content_css'])) $this->tinymceSettings['content_css'] = $row['content_css'];
+                        // if (isset($row['content_css']) and !is_null($row['content_css']) and file_exists($row['content_css'])) $this->tinymceSettings['content_css'] = $row['content_css'];
                         $tinyClass = ' class="mceEditor" ';
                         if (isset($col['mceNonEditable'])) {
                             $this->dbVars[$fld]['data'] = $this->protectMceCodes($this->dbVars[$fld]['data']);
@@ -1349,9 +1349,9 @@ class RecordManage
 
     /**
      * @param array $col
-     * @return string
+     * @return array
      */
-    private function getMultiCheckboxes(array $col):string
+    private function getMultiCheckboxes(array $col):array
     {
         $output = array();
         // get all items from sourceTable, ordered by groupBy, displayField
@@ -1884,10 +1884,10 @@ class RecordManage
     /**
      * @param AtLogging $atLog
      */
-    public function setAtLog(AtLogging $atLog)
-    {
-        $this->atLog = $atLog;
-    }
+    // public function setAtLog(AtLogging $atLog)
+    // {
+    //     $this->atLog = $atLog;
+    // }
 
     /**
      * @return mixed
